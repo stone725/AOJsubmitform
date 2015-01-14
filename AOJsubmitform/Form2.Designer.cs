@@ -75,7 +75,7 @@
 			this.OKButton.TabIndex = 4;
 			this.OKButton.Text = "OK";
 			this.OKButton.UseVisualStyleBackColor = true;
-			this.OKButton.Click += new System.EventHandler(this.OKButtonClick);
+			this.OKButton.Click += new System.EventHandler(this.OkButtonClick);
 			// 
 			// ConfigForm
 			// 

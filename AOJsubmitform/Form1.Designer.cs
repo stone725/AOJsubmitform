@@ -43,6 +43,7 @@
 			// 
 			// SourceCodeBox
 			// 
+			this.SourceCodeBox.AcceptsTab = true;
 			this.SourceCodeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -70,7 +71,7 @@
             "Python",
             "Python3",
             "PHP",
-            "Javascript"});
+            "JavaScript"});
 			this.LanguageBox.Location = new System.Drawing.Point(118, 12);
 			this.LanguageBox.Name = "LanguageBox";
 			this.LanguageBox.Size = new System.Drawing.Size(121, 20);

@@ -91,7 +91,7 @@ namespace AOJsubmitform {
 			/*レスポンスの取得と読み込み*/
 
 			/*提出結果を格納する変数*/
-			string SubmitResponse = "";
+			string submitResponse = "";
 			int challanged = 0;
 			bool success = false;
 			while (challanged < 1000) {
@@ -100,13 +100,13 @@ namespace AOJsubmitform {
 				WebResponse runIdResponse = runIdRequest.GetResponse();
 				Stream runIdResStream = runIdResponse.GetResponseStream();
 				StreamReader runIdStreamReader = new StreamReader(runIdResStream, enc);
-				SubmitResponse = runIdStreamReader.ReadToEnd();
+				submitResponse = runIdStreamReader.ReadToEnd();
 				runIdStreamReader.Close();
 				runIdResStream.Close();
 				runIdResponse.Close();
-				Int32 runIdStart = SubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
-				Int32 runIdEnd = SubmitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
-				if (lastRunId != SubmitResponse.Substring(runIdStart, runIdEnd - runIdStart)) {
+				Int32 runIdStart = submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
+				Int32 runIdEnd = submitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
+				if (lastRunId != submitResponse.Substring(runIdStart, runIdEnd - runIdStart)) {
 					success = true;
 					break;
 				}
@@ -115,9 +115,9 @@ namespace AOJsubmitform {
 			}
 			/*提出結果の取得*/
 			const string statusStartMark = "<status>\n";
-			Int32 statusStartIndex = SubmitResponse.IndexOf(statusStartMark, SubmitResponse.IndexOf(statusStartMark, StringComparison.Ordinal) + statusStartMark.Length, StringComparison.Ordinal) + statusStartMark.Length;
-			Int32 statusIdEndIndex = SubmitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
-			String submitResult = SubmitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
+			Int32 statusStartIndex = submitResponse.IndexOf(statusStartMark, submitResponse.IndexOf(statusStartMark, StringComparison.Ordinal) + statusStartMark.Length, StringComparison.Ordinal) + statusStartMark.Length;
+			Int32 statusIdEndIndex = submitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
+			String submitResult = submitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
 
 			/*提出結果の表示*/
 			string extension = @".txt";

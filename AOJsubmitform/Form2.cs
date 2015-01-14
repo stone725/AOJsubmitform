@@ -43,7 +43,7 @@ namespace AOJsubmitform {
 			}
 		}
 
-		private void OKButtonClick(object sender, EventArgs e) {
+		private void OkButtonClick(object sender, EventArgs e) {
 			Close();
 		}
 
