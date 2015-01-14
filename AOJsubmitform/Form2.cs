@@ -1,52 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
 namespace AOJsubmitform {
-	public partial class Form2 : Form {
-		public Form2() {
+	public partial class ConfigForm : Form {
+		public ConfigForm() {
 			InitializeComponent();
-			if (Form1._userName != "") {
-				textBox1.Text = Form1._userName;
+			if (SubmitForm.UserName != "") {
+				UserNameBox.Text = SubmitForm.UserName;
 			}
-			if (Form1._userPassWord != "") {
-				textBox2.Text = Form1._userPassWord;
-			}
-		}
-
-		private void label1_Click(object sender, EventArgs e) {
-
-		}
-
-		private void label2_Click(object sender, EventArgs e) {
-
-		}
-
-		private void textBox1_TextChanged(object sender, EventArgs e) {
-			Form1._userName = textBox1.Text;
-			if (Form1._userPassWord != "") {
-				var writeFile = new StreamWriter(@"Config.txt", false, Encoding.Default);
-				writeFile.WriteLine(Form1._userName);
-				writeFile.WriteLine(Form1._userPassWord);
-				writeFile.Close();
+			if (SubmitForm.UserPassWord != "") {
+				PassWordBox.Text = SubmitForm.UserPassWord;
 			}
 		}
 
-		private void textBox2_TextChanged(object sender, EventArgs e) {
-			Form1._userPassWord = textBox2.Text;
-			if (Form1._userName != "") {
-				var writeFile = new StreamWriter(@"Config.txt", false, Encoding.Default);
-				writeFile.WriteLine(Form1._userName);
-				writeFile.WriteLine(Form1._userPassWord);
-				writeFile.Close();
+		private void UserNameLabelClick(object sender, EventArgs e) {
+
+		}
+
+		private void PassWordLabelClick(object sender, EventArgs e) {
+
+		}
+
+		private void UserNameBoxChanged(object sender, EventArgs e) {
+			SubmitForm.UserName = UserNameBox.Text;
+			if (SubmitForm.UserPassWord != "") {
+				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
+				configFileWriter.WriteLine(SubmitForm.UserName);
+				configFileWriter.WriteLine(SubmitForm.UserPassWord);
+				configFileWriter.Close();
 			}
+		}
+
+		private void PassWordBoxChanged(object sender, EventArgs e) {
+			SubmitForm.UserPassWord = PassWordBox.Text;
+			if (SubmitForm.UserName != "") {
+				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
+				configFileWriter.WriteLine(SubmitForm.UserName);
+				configFileWriter.WriteLine(SubmitForm.UserPassWord);
+				configFileWriter.Close();
+			}
+		}
+
+		private void OKButtonClick(object sender, EventArgs e) {
+			Close();
 		}
 
 	}

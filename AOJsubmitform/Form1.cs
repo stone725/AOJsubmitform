@@ -1,48 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 
 namespace AOJsubmitform {
-	public partial class Form1 : Form {
+	public partial class SubmitForm : Form {
 		private bool _notChanged = true;
 		private string _problemNumber;
-		public static string _userName = "";
-		public static string _userPassWord = "";
+		public static string UserName = "";
+		public static string UserPassWord = "";
 
-		public Form1() {
+		public SubmitForm() {
 			InitializeComponent();
 			if (File.Exists("Config.txt")) {
-				var configFile = new StreamReader("Config.txt");
+				StreamReader configFileReader = new StreamReader("Config.txt");
 
-				_userName = configFile.ReadLine();
-				_userPassWord = configFile.ReadLine();
+				UserName = configFileReader.ReadLine();
+				UserPassWord = configFileReader.ReadLine();
 
-				configFile.Close();
+				configFileReader.Close();
 			}
 		}
 
 
-		private void textBox1_TextChanged(object sender, EventArgs e) {
-			_problemNumber = textBox1.Text;
+		private void ProblemNumberBoxChanged(object sender, EventArgs e) {
+			_problemNumber = ProblemNumberBox.Text;
 		}
 
-		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
+		private void LanguageboxChanged(object sender, EventArgs e) {
 
 		}
 
-		private void button1_Click(object sender, EventArgs e) {
+		private void SubmitButtonClick(object sender, EventArgs e) {
 			if (_notChanged) {
-				MessageBox.Show(@"まったく同じソースコードは提出できません!");
+				MessageBox.Show(@"一切入力していないソースコードは提出できません！");
 				return;
 			}
 
@@ -53,43 +47,44 @@ namespace AOJsubmitform {
 			/*提出設定*/
 			HttpWebRequest submitRequest = (HttpWebRequest)WebRequest.Create("http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit");
 			Encoding enc = Encoding.ASCII;
-			var submitPostHashtable = new Hashtable();
-			submitPostHashtable["userID"] = WebUtility.UrlEncode(_userName);
-			submitPostHashtable["sourceCode"] = WebUtility.UrlEncode(richTextBox1.Text);
-			submitPostHashtable["problemNO"] = WebUtility.UrlEncode(textBox1.Text);
-			submitPostHashtable["language"] = WebUtility.UrlEncode(comboBox1.Text);
-			submitPostHashtable["password"] = WebUtility.UrlEncode(_userPassWord);
+			Hashtable submitPostHashtable = new Hashtable();
+			submitPostHashtable["userID"] = WebUtility.UrlEncode(UserName);
+			submitPostHashtable["sourceCode"] = WebUtility.UrlEncode(SourceCodeBox.Text);
+			submitPostHashtable["problemNO"] = WebUtility.UrlEncode(ProblemNumberBox.Text);
+			submitPostHashtable["language"] = WebUtility.UrlEncode(LanguageBox.Text);
+			submitPostHashtable["password"] = WebUtility.UrlEncode(UserPassWord);
 			submitRequest.Method = "POST";
 
-			var submitParam = "";
+			String submitParam = "";
 			submitRequest.Timeout = 1000000000;
-			foreach (string k in submitPostHashtable.Keys) {
+			foreach (String k in submitPostHashtable.Keys) {
 				submitParam += String.Format("{0}={1}&", k, submitPostHashtable[k]);
 			}
-			var submitData = Encoding.ASCII.GetBytes(submitParam);
+			Byte[] submitData = Encoding.ASCII.GetBytes(submitParam);
 			submitRequest.ContentType = "application/x-www-form-urlencoded";
 			submitRequest.ContentLength = submitData.Length;
 			submitPostHashtable.Clear();
+
+
 			/*これから行う提出の一つ前の提出の提出番号を取得する*/
-			var responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _userName;
-			var lastRunIdRequest = (HttpWebRequest)WebRequest.Create(responseUrl);
+			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + UserName;
+			HttpWebRequest lastRunIdRequest = (HttpWebRequest)WebRequest.Create(responseUrl);
 			lastRunIdRequest.Timeout = 1000000000;
-			var lastRunIdresponse = lastRunIdRequest.GetResponse();
-			var lastrRunIdResstream = lastRunIdresponse.GetResponseStream();
-			var lastRunIdStreamReader = new StreamReader(lastrRunIdResstream, enc);
-			var lastSubmitResponse = lastRunIdStreamReader.ReadToEnd();
+			WebResponse lastRunIdresponse = lastRunIdRequest.GetResponse();
+			Stream lastrRunIdResstream = lastRunIdresponse.GetResponseStream();
+			StreamReader lastRunIdStreamReader = new StreamReader(lastrRunIdResstream, enc);
+			String lastSubmitResponse = lastRunIdStreamReader.ReadToEnd();
 			lastRunIdStreamReader.Close();
 			lastrRunIdResstream.Close();
 			lastRunIdresponse.Close();
 			const string runIdStartMark = "<run_id>\n";
-			var lastRunIdStartIndex = lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
-									  runIdStartMark.Length;
-			var lastRunIdEndIndex = lastSubmitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
-			var lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
+			Int32 lastRunIdStartIndex = lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
+			Int32 lastRunIdEndIndex = lastSubmitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
+			String lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
 
 
 			/*ポストデータの書き込み*/
-			var submitReqStream = submitRequest.GetRequestStream();
+			Stream submitReqStream = submitRequest.GetRequestStream();
 			submitReqStream.Write(submitData, 0, submitData.Length);
 			submitReqStream.Close();
 
@@ -100,17 +95,17 @@ namespace AOJsubmitform {
 			int challanged = 0;
 			bool success = false;
 			while (challanged < 1000) {
-				var runIdRequest = (HttpWebRequest)WebRequest.Create(responseUrl);
+				HttpWebRequest runIdRequest = (HttpWebRequest)WebRequest.Create(responseUrl);
 				runIdRequest.Timeout = 1000000000;
-				var runIdResponse = runIdRequest.GetResponse();
-				var runIdResStream = runIdResponse.GetResponseStream();
-				var runIdStreamReader = new StreamReader(runIdResStream, enc);
+				WebResponse runIdResponse = runIdRequest.GetResponse();
+				Stream runIdResStream = runIdResponse.GetResponseStream();
+				StreamReader runIdStreamReader = new StreamReader(runIdResStream, enc);
 				SubmitResponse = runIdStreamReader.ReadToEnd();
 				runIdStreamReader.Close();
 				runIdResStream.Close();
 				runIdResponse.Close();
-				var runIdStart = SubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
-				var runIdEnd = SubmitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
+				Int32 runIdStart = SubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
+				Int32 runIdEnd = SubmitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
 				if (lastRunId != SubmitResponse.Substring(runIdStart, runIdEnd - runIdStart)) {
 					success = true;
 					break;
@@ -120,20 +115,18 @@ namespace AOJsubmitform {
 			}
 			/*提出結果の取得*/
 			const string statusStartMark = "<status>\n";
-			var statusStartIndex =
-				SubmitResponse.IndexOf(statusStartMark,
-					SubmitResponse.IndexOf(statusStartMark, StringComparison.Ordinal) + statusStartMark.Length,
-					StringComparison.Ordinal) + statusStartMark.Length;
-			var statusIdEndIndex = SubmitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
-			var submitResult = SubmitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
+			Int32 statusStartIndex = SubmitResponse.IndexOf(statusStartMark, SubmitResponse.IndexOf(statusStartMark, StringComparison.Ordinal) + statusStartMark.Length, StringComparison.Ordinal) + statusStartMark.Length;
+			Int32 statusIdEndIndex = SubmitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
+			String submitResult = SubmitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
 
 			/*提出結果の表示*/
 			string extension = @".txt";
 			if (success) {
 				MessageBox.Show(submitResult);
+				/*提出結果がACだった場合ファイルに保存する*/
 				if (submitResult == "Accepted") {
 
-					switch (comboBox1.Text) {
+					switch (LanguageBox.Text) {
 					case "C++":
 					case "C++11":
 						extension = @".cpp";
@@ -170,9 +163,9 @@ namespace AOJsubmitform {
 					if (File.Exists(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2)) == false) {
 						Directory.CreateDirectory(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2));
 					}
-					var sourceCode = new StreamWriter(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
-					sourceCode.Write(richTextBox1.Text);
-					sourceCode.Close();
+					StreamWriter sourceCodeFileWriter = new StreamWriter(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
+					sourceCodeFileWriter.Write(SourceCodeBox.Text);
+					sourceCodeFileWriter.Close();
 				}
 			}
 			else {
@@ -181,11 +174,11 @@ namespace AOJsubmitform {
 			Close();
 		}
 
-		private void richTextBox1_TextChanged(object sender, EventArgs e) {
+		private void SourceCodeChanged(object sender, EventArgs e) {
 			_notChanged = false;
 		}
-		private void button2_Click(object sender, EventArgs e) {
-			Form2 configForm2 = new Form2();
+		private void ConfigButtonClick(object sender, EventArgs e) {
+			ConfigForm configForm2 = new ConfigForm();
 			configForm2.Show();
 		}
 
