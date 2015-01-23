@@ -8,11 +8,10 @@ using System.Threading;
 
 namespace AOJsubmitform {
 	public partial class SubmitForm : Form {
-		private bool _notChanged = true;
 		private string _problemNumber;
 		public static string UserName = "";
 		public static string UserPassWord = "";
-
+		public static string WriteDirectory = "";
 		public SubmitForm() {
 			InitializeComponent();
 			if (File.Exists("Config.txt")) {
@@ -20,7 +19,7 @@ namespace AOJsubmitform {
 
 				UserName = configFileReader.ReadLine();
 				UserPassWord = configFileReader.ReadLine();
-
+				WriteDirectory = configFileReader.ReadLine();
 				configFileReader.Close();
 			}
 		}
@@ -35,7 +34,7 @@ namespace AOJsubmitform {
 		}
 
 		private void SubmitButtonClick(object sender, EventArgs e) {
-			if (_notChanged) {
+			if (SourceCodeBox.Text == "") {
 				MessageBox.Show(@"一切入力していないソースコードは提出できません！");
 				return;
 			}
@@ -160,10 +159,10 @@ namespace AOJsubmitform {
 						extension = @".js";
 						break;
 					}
-					if (File.Exists(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2)) == false) {
-						Directory.CreateDirectory(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2));
+					if (File.Exists(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2)) == false) {
+						Directory.CreateDirectory(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2));
 					}
-					StreamWriter sourceCodeFileWriter = new StreamWriter(@"AOJ-SourceCode\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
+					StreamWriter sourceCodeFileWriter = new StreamWriter(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
 					sourceCodeFileWriter.Write(SourceCodeBox.Text);
 					sourceCodeFileWriter.Close();
 				}
@@ -175,7 +174,6 @@ namespace AOJsubmitform {
 		}
 
 		private void SourceCodeChanged(object sender, EventArgs e) {
-			_notChanged = false;
 		}
 		private void ConfigButtonClick(object sender, EventArgs e) {
 			ConfigForm configForm2 = new ConfigForm();

@@ -13,6 +13,10 @@ namespace AOJsubmitform {
 			if (SubmitForm.UserPassWord != "") {
 				PassWordBox.Text = SubmitForm.UserPassWord;
 			}
+			if (SubmitForm.WriteDirectory != "")
+			{
+				DirectoryNameBox.Text = SubmitForm.WriteDirectory;
+			}
 		}
 
 		private void UserNameLabelClick(object sender, EventArgs e) {
@@ -29,6 +33,7 @@ namespace AOJsubmitform {
 				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
 				configFileWriter.WriteLine(SubmitForm.UserName);
 				configFileWriter.WriteLine(SubmitForm.UserPassWord);
+				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
 				configFileWriter.Close();
 			}
 		}
@@ -39,6 +44,21 @@ namespace AOJsubmitform {
 				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
 				configFileWriter.WriteLine(SubmitForm.UserName);
 				configFileWriter.WriteLine(SubmitForm.UserPassWord);
+				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
+				configFileWriter.Close();
+			}
+		}
+
+		
+
+		private void DirectoryNameBoxChanged(object sender, EventArgs e)
+		{
+			SubmitForm.WriteDirectory = DirectoryNameBox.Text;
+			if (SubmitForm.UserName != "" && SubmitForm.UserPassWord != "") {
+				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
+				configFileWriter.WriteLine(SubmitForm.UserName);
+				configFileWriter.WriteLine(SubmitForm.UserPassWord);
+				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
 				configFileWriter.Close();
 			}
 		}
@@ -46,6 +66,5 @@ namespace AOJsubmitform {
 		private void OkButtonClick(object sender, EventArgs e) {
 			Close();
 		}
-
 	}
 }

@@ -28,6 +28,8 @@
 			this.UserNameBox = new System.Windows.Forms.TextBox();
 			this.PassWordBox = new System.Windows.Forms.TextBox();
 			this.OKButton = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.DirectoryNameBox = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// UserNameLabel
@@ -69,7 +71,7 @@
 			// 
 			// OKButton
 			// 
-			this.OKButton.Location = new System.Drawing.Point(59, 59);
+			this.OKButton.Location = new System.Drawing.Point(56, 84);
 			this.OKButton.Name = "OKButton";
 			this.OKButton.Size = new System.Drawing.Size(72, 23);
 			this.OKButton.TabIndex = 4;
@@ -77,19 +79,38 @@
 			this.OKButton.UseVisualStyleBackColor = true;
 			this.OKButton.Click += new System.EventHandler(this.OkButtonClick);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 62);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(64, 12);
+			this.label1.TabIndex = 5;
+			this.label1.Text = "保存フォルダ";
+			// 
+			// DirectoryNameBox
+			// 
+			this.DirectoryNameBox.Location = new System.Drawing.Point(76, 59);
+			this.DirectoryNameBox.Name = "DirectoryNameBox";
+			this.DirectoryNameBox.Size = new System.Drawing.Size(100, 19);
+			this.DirectoryNameBox.TabIndex = 6;
+			this.DirectoryNameBox.TextChanged += new System.EventHandler(this.DirectoryNameBoxChanged);
+			// 
 			// ConfigForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(182, 87);
+			this.ClientSize = new System.Drawing.Size(182, 116);
+			this.Controls.Add(this.DirectoryNameBox);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.OKButton);
 			this.Controls.Add(this.PassWordBox);
 			this.Controls.Add(this.UserNameBox);
 			this.Controls.Add(this.PassWordLabel);
 			this.Controls.Add(this.UserNameLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximumSize = new System.Drawing.Size(190, 121);
-			this.MinimumSize = new System.Drawing.Size(190, 121);
+			this.MaximumSize = new System.Drawing.Size(190, 150);
+			this.MinimumSize = new System.Drawing.Size(190, 150);
 			this.Name = "ConfigForm";
 			this.Text = "ConfigForm";
 			this.ResumeLayout(false);
@@ -104,5 +125,7 @@
 		private System.Windows.Forms.TextBox UserNameBox;
 		private System.Windows.Forms.TextBox PassWordBox;
 		private System.Windows.Forms.Button OKButton;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox DirectoryNameBox;
 	}
 }
