@@ -33,8 +33,8 @@
 			// ProblemNumberBox
 			// 
 			this.ProblemNumberBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.ProblemNumberBox.Location = new System.Drawing.Point(12, 12);
 			this.ProblemNumberBox.Name = "ProblemNumberBox";
 			this.ProblemNumberBox.Size = new System.Drawing.Size(100, 19);
@@ -45,8 +45,8 @@
 			// 
 			this.SourceCodeBox.AcceptsTab = true;
 			this.SourceCodeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.SourceCodeBox.Location = new System.Drawing.Point(13, 38);
 			this.SourceCodeBox.Name = "SourceCodeBox";
 			this.SourceCodeBox.Size = new System.Drawing.Size(599, 391);
@@ -57,21 +57,21 @@
 			// LanguageBox
 			// 
 			this.LanguageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.LanguageBox.FormattingEnabled = true;
 			this.LanguageBox.Items.AddRange(new object[] {
-            "C++",
-            "C#",
-            "C",
-            "JAVA",
-            "C++11",
-            "D",
-            "Ruby",
-            "Python",
-            "Python3",
-            "PHP",
-            "JavaScript"});
+			"C++",
+			"C#",
+			"C",
+			"JAVA",
+			"C++11",
+			"D",
+			"Ruby",
+			"Python",
+			"Python3",
+			"PHP",
+			"JavaScript"});
 			this.LanguageBox.Location = new System.Drawing.Point(118, 12);
 			this.LanguageBox.Name = "LanguageBox";
 			this.LanguageBox.Size = new System.Drawing.Size(121, 20);

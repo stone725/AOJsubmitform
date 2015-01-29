@@ -30,6 +30,8 @@
 			this.OKButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.DirectoryNameBox = new System.Windows.Forms.TextBox();
+			this.twitterConfigButton = new System.Windows.Forms.Button();
+			this.twitterConfigLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// UserNameLabel
@@ -71,7 +73,7 @@
 			// 
 			// OKButton
 			// 
-			this.OKButton.Location = new System.Drawing.Point(56, 84);
+			this.OKButton.Location = new System.Drawing.Point(62, 121);
 			this.OKButton.Name = "OKButton";
 			this.OKButton.Size = new System.Drawing.Size(72, 23);
 			this.OKButton.TabIndex = 4;
@@ -96,11 +98,32 @@
 			this.DirectoryNameBox.TabIndex = 6;
 			this.DirectoryNameBox.TextChanged += new System.EventHandler(this.DirectoryNameBoxChanged);
 			// 
+			// twitterConfigButton
+			// 
+			this.twitterConfigButton.Location = new System.Drawing.Point(101, 92);
+			this.twitterConfigButton.Name = "twitterConfigButton";
+			this.twitterConfigButton.Size = new System.Drawing.Size(75, 23);
+			this.twitterConfigButton.TabIndex = 7;
+			this.twitterConfigButton.Text = "認証";
+			this.twitterConfigButton.UseVisualStyleBackColor = true;
+			this.twitterConfigButton.Click += new System.EventHandler(this.twitterConfigButton_Click);
+			// 
+			// twitterConfigLabel
+			// 
+			this.twitterConfigLabel.AutoSize = true;
+			this.twitterConfigLabel.Location = new System.Drawing.Point(6, 97);
+			this.twitterConfigLabel.Name = "twitterConfigLabel";
+			this.twitterConfigLabel.Size = new System.Drawing.Size(86, 12);
+			this.twitterConfigLabel.TabIndex = 8;
+			this.twitterConfigLabel.Text = "Twitter認証:なし";
+			// 
 			// ConfigForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(182, 116);
+			this.ClientSize = new System.Drawing.Size(202, 156);
+			this.Controls.Add(this.twitterConfigLabel);
+			this.Controls.Add(this.twitterConfigButton);
 			this.Controls.Add(this.DirectoryNameBox);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.OKButton);
@@ -109,8 +132,8 @@
 			this.Controls.Add(this.PassWordLabel);
 			this.Controls.Add(this.UserNameLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximumSize = new System.Drawing.Size(190, 150);
-			this.MinimumSize = new System.Drawing.Size(190, 150);
+			this.MaximumSize = new System.Drawing.Size(210, 190);
+			this.MinimumSize = new System.Drawing.Size(210, 190);
 			this.Name = "ConfigForm";
 			this.Text = "ConfigForm";
 			this.ResumeLayout(false);
@@ -127,5 +150,7 @@
 		private System.Windows.Forms.Button OKButton;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox DirectoryNameBox;
+		private System.Windows.Forms.Button twitterConfigButton;
+		private System.Windows.Forms.Label twitterConfigLabel;
 	}
 }

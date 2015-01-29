@@ -5,13 +5,21 @@ using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using TweetSharp;
 
 namespace AOJsubmitform {
 	public partial class SubmitForm : Form {
 		private string _problemNumber;
+		public static TwitterService _twitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
+		public static OAuthRequestToken TwitterRequestToken;
+		public static string TwitterVerifier;
+		public static OAuthAccessToken TwitterAccess;
+		public static string TwitterToken;
+		public static string TwitterTokenSecret;
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
+		public static bool got_token = false;
 		public SubmitForm() {
 			InitializeComponent();
 			if (File.Exists("Config.txt")) {
@@ -21,6 +29,17 @@ namespace AOJsubmitform {
 				UserPassWord = configFileReader.ReadLine();
 				WriteDirectory = configFileReader.ReadLine();
 				configFileReader.Close();
+				
+			}
+			if (File.Exists("TwitterConfig.txt"))
+			{
+				StreamReader twitterConfigFileReader = new StreamReader("TwitterConfig.txt");
+				TwitterToken = twitterConfigFileReader.ReadLine();
+				TwitterTokenSecret = twitterConfigFileReader.ReadLine();
+				twitterConfigFileReader.Close();
+				_twitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
+				got_token = true;
+				
 			}
 		}
 
@@ -93,7 +112,7 @@ namespace AOJsubmitform {
 			string submitResponse = "";
 			int challanged = 0;
 			bool success = false;
-			while (challanged < 1000) {
+			while (challanged <= 100) {
 				HttpWebRequest runIdRequest = (HttpWebRequest)WebRequest.Create(responseUrl);
 				runIdRequest.Timeout = 1000000000;
 				WebResponse runIdResponse = runIdRequest.GetResponse();
@@ -165,6 +184,7 @@ namespace AOJsubmitform {
 					StreamWriter sourceCodeFileWriter = new StreamWriter(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
 					sourceCodeFileWriter.Write(SourceCodeBox.Text);
 					sourceCodeFileWriter.Close();
+					_twitterService.SendTweet(new SendTweetOptions{Status = UserName + @"がAOJ" + _problemNumber + @"をACしました!"});//textBox1のTextを送信
 				}
 			}
 			else {

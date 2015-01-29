@@ -17,6 +17,10 @@ namespace AOJsubmitform {
 			{
 				DirectoryNameBox.Text = SubmitForm.WriteDirectory;
 			}
+			if (SubmitForm.got_token)
+			{
+				twitterConfigLabel.Text = @"twitter認証:あり";
+			}
 		}
 
 		private void UserNameLabelClick(object sender, EventArgs e) {
@@ -36,6 +40,12 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
 				configFileWriter.Close();
 			}
+			if (SubmitForm.got_token) {
+				StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
+				twitterConfigFileWriter.WriteLine(SubmitForm.TwitterToken);
+				twitterConfigFileWriter.WriteLine(SubmitForm.TwitterTokenSecret);
+				twitterConfigFileWriter.Close();
+			}
 		}
 
 		private void PassWordBoxChanged(object sender, EventArgs e) {
@@ -46,6 +56,12 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(SubmitForm.UserPassWord);
 				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
 				configFileWriter.Close();
+			}
+			if (SubmitForm.got_token) {
+				StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
+				twitterConfigFileWriter.WriteLine(SubmitForm.TwitterToken);
+				twitterConfigFileWriter.WriteLine(SubmitForm.TwitterTokenSecret);
+				twitterConfigFileWriter.Close();
 			}
 		}
 
@@ -60,11 +76,25 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(SubmitForm.UserPassWord);
 				configFileWriter.WriteLine(SubmitForm.WriteDirectory);
 				configFileWriter.Close();
-			}
+				if (SubmitForm.got_token)
+				{
+					StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
+					twitterConfigFileWriter.WriteLine(SubmitForm.TwitterToken);
+					twitterConfigFileWriter.WriteLine(SubmitForm.TwitterTokenSecret);
+					twitterConfigFileWriter.Close();
+				}
+							}
 		}
 
 		private void OkButtonClick(object sender, EventArgs e) {
 			Close();
+		}
+
+		private void twitterConfigButton_Click(object sender, EventArgs e)
+		{
+			
+			Form3 form3 = new Form3();
+			form3.Show();
 		}
 	}
 }
