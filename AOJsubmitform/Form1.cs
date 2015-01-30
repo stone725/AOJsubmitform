@@ -22,6 +22,19 @@ namespace AOJsubmitform {
 		public static bool got_token = false;
 		public SubmitForm() {
 			InitializeComponent();
+			if (Program.FileName != "")
+			{
+				if (File.Exists(Program.FileName))
+				{
+					StreamReader sourceCodeReader = new StreamReader(Program.FileName);
+					SourceCodeBox.Text = sourceCodeReader.ReadToEnd();
+					sourceCodeReader.Close();
+				}
+				else
+				{
+					MessageBox.Show(@"読み込むファイルがありません!");
+				}
+			}
 			if (File.Exists("Config.txt")) {
 				StreamReader configFileReader = new StreamReader("Config.txt");
 
@@ -178,13 +191,17 @@ namespace AOJsubmitform {
 						extension = @".js";
 						break;
 					}
-					if (File.Exists(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2)) == false) {
-						Directory.CreateDirectory(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2));
+					if (WriteDirectory != "")
+					{
+						WriteDirectory += @"\\";
 					}
-					StreamWriter sourceCodeFileWriter = new StreamWriter(WriteDirectory + @"\\Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
+					if (File.Exists(WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2)) == false) {
+						Directory.CreateDirectory(WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2));
+					}
+					StreamWriter sourceCodeFileWriter = new StreamWriter(WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\" + _problemNumber + extension, false, Encoding.Default);
 					sourceCodeFileWriter.Write(SourceCodeBox.Text);
 					sourceCodeFileWriter.Close();
-					_twitterService.SendTweet(new SendTweetOptions{Status = UserName + @"がAOJ" + _problemNumber + @"をACしました!"});//textBox1のTextを送信
+					_twitterService.SendTweet(new SendTweetOptions{Status = UserName + @"がAOJ" + _problemNumber + @"を言語" + LanguageBox.Text + @"でACしました! #AOJACinfo"});
 				}
 			}
 			else {
