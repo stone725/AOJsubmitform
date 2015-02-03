@@ -1,5 +1,5 @@
 ﻿namespace AOJsubmitform {
-	partial class Form3 {
+	partial class TwitterAttestationForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -38,7 +38,7 @@
 			this.webBrowser1.TabIndex = 0;
 			this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
 			// 
-			// Form3
+			// TwitterAttestationForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -46,7 +46,7 @@
 			this.Controls.Add(this.webBrowser1);
 			this.Location = new System.Drawing.Point(480, 360);
 			this.MaximumSize = new System.Drawing.Size(480, 360);
-			this.Name = "Form3";
+			this.Name = "TwitterAttestationForm";
 			this.Text = "Twitter認証";
 			this.Load += new System.EventHandler(this.Form3_Load);
 			this.ResumeLayout(false);

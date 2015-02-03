@@ -23,24 +23,24 @@ namespace AOJsubmitform
 			HttpWebRequest submitRequest =
 				(HttpWebRequest) WebRequest.Create("http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit");
 			Encoding enc = Encoding.GetEncoding("Shift_JIS");
-			Hashtable submitPostHashtable = new Hashtable();
-			submitPostHashtable["userID"] = WebUtility.UrlEncode(_account.getUserName());
-			submitPostHashtable["sourceCode"] = WebUtility.UrlEncode(sourceCode);
-			submitPostHashtable["problemNO"] = WebUtility.UrlEncode(problemNO);
-			submitPostHashtable["language"] = WebUtility.UrlEncode(language);
-			submitPostHashtable["password"] = WebUtility.UrlEncode(_account.getUserPass());
+			Hashtable submitConfig = new Hashtable();
+			submitConfig["userID"] = WebUtility.UrlEncode(_account.getUserName());
+			submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
+			submitConfig["problemNO"] = WebUtility.UrlEncode(problemNO);
+			submitConfig["language"] = WebUtility.UrlEncode(language);
+			submitConfig["password"] = WebUtility.UrlEncode(_account.getUserPass());
 			submitRequest.Method = "POST";
 
 			String submitParam = "";
 			submitRequest.Timeout = 1000000000;
-			foreach (String k in submitPostHashtable.Keys)
+			foreach (String key in submitConfig.Keys)
 			{
-				submitParam += String.Format("{0}={1}&", k, submitPostHashtable[k]);
+				submitParam += String.Format("{0}={1}&", key, submitConfig[key]);
 			}
-			Byte[] submitData = Encoding.ASCII.GetBytes(submitParam);
+			Byte[] submitData = Encoding.GetEncoding("Shift_JIS").GetBytes(submitParam);
 			submitRequest.ContentType = "application/x-www-form-urlencoded";
 			submitRequest.ContentLength = submitData.Length;
-			submitPostHashtable.Clear();
+			submitConfig.Clear();
 
 
 			/*これから行う提出の一つ前の提出の提出番号を取得する*/
@@ -73,6 +73,7 @@ namespace AOJsubmitform
 			int challanged = 0;
 			bool success = false;
 
+			//200ms * 100 = 20000ms→20sより100回試行
 			while (challanged <= 100)
 			{
 				HttpWebRequest runIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);

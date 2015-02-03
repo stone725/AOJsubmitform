@@ -1,5 +1,5 @@
 ﻿namespace AOJsubmitform {
-	partial class SubmitForm {
+	partial class MainForm {
 		/// <summary>
 		/// 必要なデザイナー変数です。
 		/// </summary>
@@ -100,7 +100,7 @@
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler(this.ConfigButtonClick);
 			// 
-			// SubmitForm
+			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -110,7 +110,7 @@
 			this.Controls.Add(this.LanguageBox);
 			this.Controls.Add(this.SourceCodeBox);
 			this.Controls.Add(this.ProblemNumberBox);
-			this.Name = "SubmitForm";
+			this.Name = "MainForm";
 			this.Text = "Submit Form";
 			this.ResumeLayout(false);
 			this.PerformLayout();

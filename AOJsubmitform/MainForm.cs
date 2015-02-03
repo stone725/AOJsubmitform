@@ -4,9 +4,9 @@ using System.Windows.Forms;
 using TweetSharp;
 
 namespace AOJsubmitform {
-	public partial class SubmitForm : Form {
+	public partial class MainForm : Form {
 		private string _problemNumber;
-		public static TwitterService _twitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
+		public static TwitterService TwitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
 		public static OAuthRequestToken TwitterRequestToken;
 		public static string TwitterVerifier;
 		public static OAuthAccessToken TwitterAccess;
@@ -15,10 +15,10 @@ namespace AOJsubmitform {
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
-		public static bool got_token = false;
+		public static bool GetToken = false;
 		private GetExtension _extension = new GetExtension();
 		private FileWriter fileWriter = new FileWriter();
-		public SubmitForm() {
+		public MainForm() {
 			InitializeComponent();
 			if (Program.FileName != "")
 			{
@@ -48,8 +48,8 @@ namespace AOJsubmitform {
 				TwitterToken = twitterConfigFileReader.ReadLine();
 				TwitterTokenSecret = twitterConfigFileReader.ReadLine();
 				twitterConfigFileReader.Close();
-				_twitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
-				got_token = true;
+				TwitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
+				GetToken = true;
 				
 			}
 		}
@@ -117,7 +117,7 @@ namespace AOJsubmitform {
 				case 0:
 					MessageBox.Show(@"Accepted");
 					fileWriter.write(directoryName, fileName, SourceCodeBox.Text);
-					_twitterService.SendTweet(new SendTweetOptions { Status = UserName + @"がAOJ" + _problemNumber + @"を言語" + LanguageBox.Text + @"でACしました! #AOJACinfo" });
+					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + @"がAOJ" + _problemNumber + @"を言語" + LanguageBox.Text + @"でACしました! #AOJACinfo" });
 					break;
 			}
 			Close();
