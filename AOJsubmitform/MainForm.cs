@@ -15,7 +15,6 @@ namespace AOJsubmitform {
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
-		public static bool GetToken = false;
 		private GetExtension _extension = new GetExtension();
 		private FileWriter fileWriter = new FileWriter();
 		public MainForm() {
@@ -49,7 +48,6 @@ namespace AOJsubmitform {
 				TwitterTokenSecret = twitterConfigFileReader.ReadLine();
 				twitterConfigFileReader.Close();
 				TwitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
-				GetToken = true;
 				
 			}
 		}
@@ -112,12 +110,12 @@ namespace AOJsubmitform {
 					break;
 				case 1:
 					MessageBox.Show(@"Partial Points");
-					fileWriter.write(directoryName, fileName, "//Partial Points.\n" + SourceCodeBox.Text);
+					fileWriter.Write(directoryName, fileName, "//Partial Points.\n" + SourceCodeBox.Text);
 					break;
 				case 0:
 					MessageBox.Show(@"Accepted");
-					fileWriter.write(directoryName, fileName, SourceCodeBox.Text);
-					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + @"がAOJ" + _problemNumber + @"を言語" + LanguageBox.Text + @"でACしました! #AOJACinfo" });
+					fileWriter.Write(directoryName, fileName, SourceCodeBox.Text);
+					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
 					break;
 			}
 			Close();

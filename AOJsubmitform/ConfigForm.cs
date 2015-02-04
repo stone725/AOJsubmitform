@@ -17,10 +17,6 @@ namespace AOJsubmitform {
 			{
 				DirectoryNameBox.Text = MainForm.WriteDirectory;
 			}
-			if (MainForm.GetToken)
-			{
-				twitterConfigLabel.Text = @"twitter認証:あり";
-			}
 		}
 
 		private void UserNameLabelClick(object sender, EventArgs e) {
@@ -40,12 +36,6 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(MainForm.WriteDirectory);
 				configFileWriter.Close();
 			}
-			if (MainForm.GetToken) {
-				StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
-				twitterConfigFileWriter.WriteLine(MainForm.TwitterToken);
-				twitterConfigFileWriter.WriteLine(MainForm.TwitterTokenSecret);
-				twitterConfigFileWriter.Close();
-			}
 		}
 
 		private void PassWordBoxChanged(object sender, EventArgs e) {
@@ -56,12 +46,6 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(MainForm.UserPassWord);
 				configFileWriter.WriteLine(MainForm.WriteDirectory);
 				configFileWriter.Close();
-			}
-			if (MainForm.GetToken) {
-				StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
-				twitterConfigFileWriter.WriteLine(MainForm.TwitterToken);
-				twitterConfigFileWriter.WriteLine(MainForm.TwitterTokenSecret);
-				twitterConfigFileWriter.Close();
 			}
 		}
 
@@ -76,14 +60,7 @@ namespace AOJsubmitform {
 				configFileWriter.WriteLine(MainForm.UserPassWord);
 				configFileWriter.WriteLine(MainForm.WriteDirectory);
 				configFileWriter.Close();
-				if (MainForm.GetToken)
-				{
-					StreamWriter twitterConfigFileWriter = new StreamWriter("TwitterConfig.txt");
-					twitterConfigFileWriter.WriteLine(MainForm.TwitterToken);
-					twitterConfigFileWriter.WriteLine(MainForm.TwitterTokenSecret);
-					twitterConfigFileWriter.Close();
-				}
-							}
+			}
 		}
 
 		private void OkButtonClick(object sender, EventArgs e) {
@@ -91,8 +68,7 @@ namespace AOJsubmitform {
 		}
 
 		private void twitterConfigButton_Click(object sender, EventArgs e)
-		{
-			
+		{	
 			TwitterAttestationForm twitterAttestationForm = new TwitterAttestationForm();
 			twitterAttestationForm.Show();
 		}

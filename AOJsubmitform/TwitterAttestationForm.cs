@@ -29,13 +29,12 @@ namespace AOJsubmitform {
 
 		private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e) {
 			string code = webBrowser1.DocumentText;//codeにソースコードを入れる
-			if (-1 != code.IndexOf("<CODE>"))//ソース内に「<code>」が存在するか
+			if (-1 != code.IndexOf("<CODE>", StringComparison.Ordinal))//ソース内に「<code>」が存在するか
 			{
 				webBrowser1.Visible = false;//コードを取得したので,認証画面を消す
-				int loc = code.IndexOf("<CODE>");//「<code>」の位置を取得.
+				int loc = code.IndexOf("<CODE>", StringComparison.Ordinal);//「<code>」の位置を取得.
 				MainForm.TwitterVerifier = code.Substring(loc, 13);//「<code>」の位置から13文字分を取り出す.
 				MainForm.TwitterVerifier = MainForm.TwitterVerifier.Replace("<CODE>", "");//「<code>」を削除
-				MainForm.GetToken = true;
 				GetToken();//トーキンを取得.
 			}
 		}

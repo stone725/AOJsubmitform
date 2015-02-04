@@ -5,7 +5,7 @@ namespace AOJsubmitform
 {
 	public class FileWriter
 	{
-		public void write(string directoryName, string fileName, string text)
+		public void Write(string directoryName, string fileName, string text)
 		{
 			if (File.Exists(directoryName) == false)
 			{
