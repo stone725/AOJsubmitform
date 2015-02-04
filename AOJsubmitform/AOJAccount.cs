@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.IO;
-using System.Net;
-using System.Collections;
-using System.Windows.Forms;
-
+﻿//AOJのアカウント情報を取り扱う
 namespace AOJsubmitform {
-	public class AOJAccount
+	public class AojAccount
 	{
-		private readonly string userName;
-		private readonly string userPass;
+		private readonly string _userName;
+		private readonly string _userPass;
 
-		public string getUserName()
+		//ユーザー名を返す関数
+		public string GetUserName()
 		{
-			return userName;
+			return _userName;
 		}
 
-		public string getUserPass()
+		//ユーザーパスワードを返す関数
+		public string GetUserPass()
 		{
-			return userPass;
+			return _userPass;
 		}
 
-		public AOJAccount(string Name, string Pass)
+		//アカウント情報の登録
+		public AojAccount(string name, string pass)
 		{
-			userName = Name;
-			userPass = Pass;
+			_userName = name;
+			_userPass = pass;
 		}
 
 	}

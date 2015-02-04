@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿//ファイル保存
+using System.IO;
 using System.Text;
 
 namespace AOJsubmitform
 {
 	public class FileWriter
 	{
+		//ファイルを保存する関数
 		public void Write(string directoryName, string fileName, string text)
 		{
 			if (File.Exists(directoryName) == false)
