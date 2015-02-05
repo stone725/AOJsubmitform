@@ -9,7 +9,7 @@ using System.Collections;
 using System.Windows.Forms;
 
 namespace AOJsubmitform {
-	public class AOJAccount
+	public class AojAccount
 	{
 		private readonly string userName;
 		private readonly string userPass;
@@ -24,7 +24,7 @@ namespace AOJsubmitform {
 			return userPass;
 		}
 
-		public AOJAccount(string Name, string Pass)
+		public AojAccount(string Name, string Pass)
 		{
 			userName = Name;
 			userPass = Pass;

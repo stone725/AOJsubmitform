@@ -74,8 +74,8 @@ namespace AOJsubmitform {
 			if (WriteDirectory != "") {
 				WriteDirectory += @"\\";
 			}
-			AOJAccount aojuserAccount = new AOJAccount(UserName, UserPassWord);
-			AOJSubmit aojSubmit = new AOJSubmit(aojuserAccount);
+			AojAccount aojuserAccount = new AojAccount(UserName, UserPassWord);
+			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
 			int status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
 			string fileName = _problemNumber + _extension.getExtension(LanguageBox.Text);
