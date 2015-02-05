@@ -19,7 +19,6 @@ namespace AOJsubmitform {
 			}
 		}
 
-		
 		private void UserNameLabelClick(object sender, EventArgs e) {
 
 		}
@@ -27,6 +26,7 @@ namespace AOJsubmitform {
 		private void PassWordLabelClick(object sender, EventArgs e) {
 
 		}
+
 		private void UserNameBoxChanged(object sender, EventArgs e) {
 			MainForm.UserName = UserNameBox.Text;
 			if (MainForm.UserPassWord != "") {
@@ -37,6 +37,7 @@ namespace AOJsubmitform {
 				configFileWriter.Close();
 			}
 		}
+
 		private void PassWordBoxChanged(object sender, EventArgs e) {
 			MainForm.UserPassWord = PassWordBox.Text;
 			if (MainForm.UserName != "") {
@@ -49,6 +50,7 @@ namespace AOJsubmitform {
 		}
 
 		
+
 		private void DirectoryNameBoxChanged(object sender, EventArgs e)
 		{
 			MainForm.WriteDirectory = DirectoryNameBox.Text;
@@ -60,9 +62,11 @@ namespace AOJsubmitform {
 				configFileWriter.Close();
 			}
 		}
+
 		private void OkButtonClick(object sender, EventArgs e) {
 			Close();
 		}
+
 		private void twitterConfigButton_Click(object sender, EventArgs e)
 		{	
 			TwitterAttestationForm twitterAttestationForm = new TwitterAttestationForm();

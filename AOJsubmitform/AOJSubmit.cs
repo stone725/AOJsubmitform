@@ -3,43 +3,48 @@ using System.IO;
 using System;
 using System.Threading;
 using System.Collections;
-using System.Linq;
 using System.Text;
 
 namespace AOJsubmitform
 {
-	public class AojSubmit
+	public class AOJSubmit
 	{
-		private readonly AojAccount _account;
+		private readonly AOJAccount _account;
 
-		public AojSubmit(AojAccount aojAccount)
+		public AOJSubmit(AOJAccount aojAccount)
 		{
 			_account = aojAccount;
 		}
 
 
-		public int Submit(string problemNo, string language, string sourceCode)
+
+		public int Submit(string problemNO, string language, string sourceCode)
 		{
 			HttpWebRequest submitRequest =
 				(HttpWebRequest) WebRequest.Create("http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit");
 			Encoding enc = Encoding.GetEncoding("Shift_JIS");
 			Hashtable submitConfig = new Hashtable();
-			submitConfig["userID"] = WebUtility.UrlEncode(_account.GetUserName());
+			submitConfig["userID"] = WebUtility.UrlEncode(_account.getUserName());
 			submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
-			submitConfig["problemNO"] = WebUtility.UrlEncode(problemNo);
+			submitConfig["problemNO"] = WebUtility.UrlEncode(problemNO);
 			submitConfig["language"] = WebUtility.UrlEncode(language);
-			submitConfig["password"] = WebUtility.UrlEncode(_account.GetUserPass());
+			submitConfig["password"] = WebUtility.UrlEncode(_account.getUserPass());
 			submitRequest.Method = "POST";
 
+			String submitParam = "";
 			submitRequest.Timeout = 1000000000;
-			String submitParam = submitConfig.Keys.Cast<string>().Aggregate("", (current, key) => current + String.Format("{0}={1}&", key, submitConfig[key]));
+			foreach (String key in submitConfig.Keys)
+			{
+				submitParam += String.Format("{0}={1}&", key, submitConfig[key]);
+			}
 			Byte[] submitData = Encoding.GetEncoding("Shift_JIS").GetBytes(submitParam);
 			submitRequest.ContentType = "application/x-www-form-urlencoded";
 			submitRequest.ContentLength = submitData.Length;
 			submitConfig.Clear();
 
 
-			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _account.GetUserName();
+			/*これから行う提出の一つ前の提出の提出番号を取得する*/
+			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _account.getUserName();
 			HttpWebRequest lastRunIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);
 			lastRunIdRequest.Timeout = 1000000000;
 			WebResponse lastRunIdresponse = lastRunIdRequest.GetResponse();
@@ -56,13 +61,19 @@ namespace AOJsubmitform
 			String lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
 
 
+			/*ポストデータの書き込み*/
 			Stream submitReqStream = submitRequest.GetRequestStream();
 			submitReqStream.Write(submitData, 0, submitData.Length);
 			submitReqStream.Close();
+
+			/*レスポンスの取得と読み込み*/
+
+			/*提出結果を格納する変数*/
 			string submitResponse = "";
 			int challanged = 0;
 			bool success = false;
 
+			//200ms * 100 = 20000ms→20sより100回試行
 			while (challanged <= 100)
 			{
 				HttpWebRequest runIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);
@@ -88,6 +99,7 @@ namespace AOJsubmitform
 			{
 				return -1;
 			}
+			/*提出結果の取得*/
 			const string statusStartMark = "<status>\n";
 			Int32 statusStartIndex =
 				submitResponse.IndexOf(statusStartMark,
@@ -96,7 +108,7 @@ namespace AOJsubmitform
 			Int32 statusIdEndIndex = submitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
 			String submitResult = submitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
 
-			//提出結果による分岐
+			/*提出結果の表示*/
 			switch (submitResult)
 			{
 				case "Accepted":
