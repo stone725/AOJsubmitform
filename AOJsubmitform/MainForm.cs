@@ -79,6 +79,8 @@ namespace AOJsubmitform {
 			int status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
 			string fileName = _problemNumber + _extension.getExtension(LanguageBox.Text);
+			TopMost = true;
+			TopMost = false;
 			switch (status)
 			{
 				case -1:
@@ -118,9 +120,12 @@ namespace AOJsubmitform {
 					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
 					break;
 			}
+			
 			Close();
 		}
-
+		
+		// ShowWindowAsync関数のパラメータに渡す定義値
+		private const int SW_RESTORE = 9;  // 画面を元の大きさに戻す
 		private void SourceCodeChanged(object sender, EventArgs e) {
 		}
 		private void ConfigButtonClick(object sender, EventArgs e) {
