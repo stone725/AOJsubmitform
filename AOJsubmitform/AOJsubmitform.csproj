@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AOJAccount.cs" />
     <Compile Include="AOJSubmit.cs" />
+    <Compile Include="ConfigWriter.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

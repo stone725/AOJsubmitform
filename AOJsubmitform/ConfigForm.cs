@@ -29,24 +29,14 @@ namespace AOJsubmitform {
 
 		private void UserNameBoxChanged(object sender, EventArgs e) {
 			MainForm.UserName = UserNameBox.Text;
-			if (MainForm.UserPassWord != "") {
-				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
-				configFileWriter.WriteLine(MainForm.UserName);
-				configFileWriter.WriteLine(MainForm.UserPassWord);
-				configFileWriter.WriteLine(MainForm.WriteDirectory);
-				configFileWriter.Close();
-			}
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
 		}
 
 		private void PassWordBoxChanged(object sender, EventArgs e) {
 			MainForm.UserPassWord = PassWordBox.Text;
-			if (MainForm.UserName != "") {
-				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
-				configFileWriter.WriteLine(MainForm.UserName);
-				configFileWriter.WriteLine(MainForm.UserPassWord);
-				configFileWriter.WriteLine(MainForm.WriteDirectory);
-				configFileWriter.Close();
-			}
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
 		}
 
 		
@@ -55,11 +45,8 @@ namespace AOJsubmitform {
 		{
 			MainForm.WriteDirectory = DirectoryNameBox.Text;
 			if (MainForm.UserName != "" && MainForm.UserPassWord != "") {
-				StreamWriter configFileWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
-				configFileWriter.WriteLine(MainForm.UserName);
-				configFileWriter.WriteLine(MainForm.UserPassWord);
-				configFileWriter.WriteLine(MainForm.WriteDirectory);
-				configFileWriter.Close();
+				ConfigWriter configWriter = new ConfigWriter();
+				configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
 			}
 		}
 

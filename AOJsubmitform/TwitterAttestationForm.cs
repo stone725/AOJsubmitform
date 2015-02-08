@@ -20,10 +20,8 @@ namespace AOJsubmitform {
 			MainForm.TwitterService.AuthenticateWith(MainForm.TwitterAccess.Token, MainForm.TwitterAccess.TokenSecret);
 			MainForm.TwitterToken = MainForm.TwitterAccess.Token;
 			MainForm.TwitterTokenSecret = MainForm.TwitterAccess.TokenSecret;
-			StreamWriter configFileWriter = new StreamWriter(@"TwitterConfig.txt", false, Encoding.Default);
-			configFileWriter.WriteLine(MainForm.TwitterToken);
-			configFileWriter.WriteLine(MainForm.TwitterTokenSecret);
-			configFileWriter.Close();
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.TwitterConfigWrite(MainForm.TwitterToken, MainForm.TwitterTokenSecret);
 			Close();
 		}
 
