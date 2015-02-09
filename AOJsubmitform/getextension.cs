@@ -2,7 +2,7 @@
 {
 	public class GetExtension
 	{
-		public string getExtension(string language)
+		public static string getExtension(string language)
 		{
 			switch (language) {
 				case "C++":

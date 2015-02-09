@@ -15,8 +15,7 @@ namespace AOJsubmitform {
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
-		private GetExtension _extension = new GetExtension();
-		private FileWriter fileWriter = new FileWriter();
+		private readonly FileWriter _fileWriter = new FileWriter();
 		public MainForm() {
 			InitializeComponent();
 			if (Program.FileName != "")
@@ -77,7 +76,7 @@ namespace AOJsubmitform {
 			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
 			int status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
-			string fileName = _problemNumber + _extension.getExtension(LanguageBox.Text);
+			string fileName = _problemNumber + GetExtension.getExtension(LanguageBox.Text);
 			TopMost = true;
 			switch (status)
 			{
@@ -110,11 +109,11 @@ namespace AOJsubmitform {
 					break;
 				case 1:
 					MessageBox.Show(@"Partial Points");
-					fileWriter.Write(directoryName, fileName, "//Partial Points.\n" + SourceCodeBox.Text);
+					_fileWriter.Write(directoryName, fileName, "//Partial Points.\n" + SourceCodeBox.Text);
 					break;
 				case 0:
 					MessageBox.Show(@"Accepted");
-					fileWriter.Write(directoryName, fileName, SourceCodeBox.Text);
+					_fileWriter.Write(directoryName, fileName, SourceCodeBox.Text);
 					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
 					break;
 			}

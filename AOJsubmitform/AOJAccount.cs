@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.IO;
-using System.Net;
-using System.Collections;
-using System.Windows.Forms;
-
-namespace AOJsubmitform {
+﻿namespace AOJsubmitform {
 	public class AojAccount
 	{
 		private readonly string userName;
 		private readonly string userPass;
 
-		public string getUserName()
+		public string GetUserName()
 		{
 			return userName;
 		}
 
-		public string getUserPass()
+		public string GetUserPass()
 		{
 			return userPass;
 		}
 
-		public AojAccount(string Name, string Pass)
+		public AojAccount(string name, string pass)
 		{
-			userName = Name;
-			userPass = Pass;
+			userName = name;
+			userPass = pass;
 		}
 
 	}

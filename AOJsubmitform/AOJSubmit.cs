@@ -25,11 +25,11 @@ namespace AOJsubmitform
 				(HttpWebRequest) WebRequest.Create("http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit");
 			Encoding enc = Encoding.GetEncoding("Shift_JIS");
 			Hashtable submitConfig = new Hashtable();
-			submitConfig["userID"] = WebUtility.UrlEncode(_account.getUserName());
+			submitConfig["userID"] = WebUtility.UrlEncode(_account.GetUserName());
 			submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
 			submitConfig["problemNO"] = WebUtility.UrlEncode(problemNo);
 			submitConfig["language"] = WebUtility.UrlEncode(language);
-			submitConfig["password"] = WebUtility.UrlEncode(_account.getUserPass());
+			submitConfig["password"] = WebUtility.UrlEncode(_account.GetUserPass());
 			submitRequest.Method = "POST";
 
 			submitRequest.Timeout = 1000000000;
@@ -41,7 +41,7 @@ namespace AOJsubmitform
 
 
 			/*これから行う提出の一つ前の提出の提出番号を取得する*/
-			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _account.getUserName();
+			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _account.GetUserName();
 			HttpWebRequest lastRunIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);
 			lastRunIdRequest.Timeout = 1000000000;
 			WebResponse lastRunIdresponse = lastRunIdRequest.GetResponse();
