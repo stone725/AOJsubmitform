@@ -15,6 +15,8 @@ namespace AOJsubmitform {
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
+		public static string ProblemName;
+		public static bool SaveProblemName = false;
 		private readonly FileWriter _fileWriter = new FileWriter();
 		public MainForm() {
 			InitializeComponent();
@@ -36,6 +38,7 @@ namespace AOJsubmitform {
 				UserName = configFileReader.ReadLine();
 				UserPassWord = configFileReader.ReadLine();
 				WriteDirectory = configFileReader.ReadLine();
+				SaveProblemName = configFileReader.ReadLine() == "save";
 				configFileReader.Close();
 				
 			}
@@ -69,6 +72,12 @@ namespace AOJsubmitform {
 				MessageBox.Show(@"問題番号を入力してください!");
 				return;
 			}
+			ProblemName = GetProblemName.Getproblemname(_problemNumber);
+			if (ProblemName == "")
+			{
+				MessageBox.Show(@"正しい問題番号を入力してください!");
+				return;
+			}
 			if (WriteDirectory != "") {
 				WriteDirectory += @"\\";
 			}
@@ -76,7 +85,12 @@ namespace AOJsubmitform {
 			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
 			int status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
-			string fileName = _problemNumber + GetExtension.getExtension(LanguageBox.Text);
+			string fileName = _problemNumber;
+			if (SaveProblemName)
+			{
+				fileName += " " + ProblemName;
+			}
+			fileName += GetExtension.getExtension(LanguageBox.Text);
 			TopMost = true;
 			switch (status)
 			{
@@ -114,7 +128,7 @@ namespace AOJsubmitform {
 				case 0:
 					MessageBox.Show(@"Accepted");
 					_fileWriter.Write(directoryName, fileName, SourceCodeBox.Text);
-					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
+					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
 					break;
 			}
 			

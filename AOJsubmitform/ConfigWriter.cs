@@ -3,12 +3,20 @@ using System.Text;
 
 namespace AOJsubmitform {
 	class ConfigWriter {
-		public void ConfigWrite(string username, string userpassword, string writedirectory)
+		public void ConfigWrite(string username, string userpassword, string writedirectory, bool saveproblemname)
 		{
 			StreamWriter configWriter = new StreamWriter(@"Config.txt", false, Encoding.Default);
 			configWriter.WriteLine(username);
 			configWriter.WriteLine(userpassword);
 			configWriter.WriteLine(writedirectory);
+			if (saveproblemname)
+			{
+				configWriter.WriteLine("save");
+			}
+			else
+			{
+				configWriter.WriteLine("");
+			}
 			configWriter.Close();
 		}
 

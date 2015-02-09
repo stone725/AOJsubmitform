@@ -31,6 +31,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.DirectoryNameBox = new System.Windows.Forms.TextBox();
 			this.twitterConfigButton = new System.Windows.Forms.Button();
+			this.saveCheckBox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// UserNameLabel
@@ -57,7 +58,7 @@
 			// 
 			this.UserNameBox.Location = new System.Drawing.Point(76, 10);
 			this.UserNameBox.Name = "UserNameBox";
-			this.UserNameBox.Size = new System.Drawing.Size(100, 19);
+			this.UserNameBox.Size = new System.Drawing.Size(124, 19);
 			this.UserNameBox.TabIndex = 2;
 			this.UserNameBox.TextChanged += new System.EventHandler(this.UserNameBoxChanged);
 			// 
@@ -65,14 +66,14 @@
 			// 
 			this.PassWordBox.Location = new System.Drawing.Point(76, 34);
 			this.PassWordBox.Name = "PassWordBox";
-			this.PassWordBox.Size = new System.Drawing.Size(100, 19);
+			this.PassWordBox.Size = new System.Drawing.Size(124, 19);
 			this.PassWordBox.TabIndex = 3;
 			this.PassWordBox.UseSystemPasswordChar = true;
 			this.PassWordBox.TextChanged += new System.EventHandler(this.PassWordBoxChanged);
 			// 
 			// OKButton
 			// 
-			this.OKButton.Location = new System.Drawing.Point(98, 84);
+			this.OKButton.Location = new System.Drawing.Point(98, 111);
 			this.OKButton.Name = "OKButton";
 			this.OKButton.Size = new System.Drawing.Size(72, 23);
 			this.OKButton.TabIndex = 4;
@@ -93,13 +94,13 @@
 			// 
 			this.DirectoryNameBox.Location = new System.Drawing.Point(76, 59);
 			this.DirectoryNameBox.Name = "DirectoryNameBox";
-			this.DirectoryNameBox.Size = new System.Drawing.Size(100, 19);
+			this.DirectoryNameBox.Size = new System.Drawing.Size(124, 19);
 			this.DirectoryNameBox.TabIndex = 6;
 			this.DirectoryNameBox.TextChanged += new System.EventHandler(this.DirectoryNameBoxChanged);
 			// 
 			// twitterConfigButton
 			// 
-			this.twitterConfigButton.Location = new System.Drawing.Point(8, 84);
+			this.twitterConfigButton.Location = new System.Drawing.Point(8, 111);
 			this.twitterConfigButton.Name = "twitterConfigButton";
 			this.twitterConfigButton.Size = new System.Drawing.Size(77, 23);
 			this.twitterConfigButton.TabIndex = 7;
@@ -107,11 +108,28 @@
 			this.twitterConfigButton.UseVisualStyleBackColor = true;
 			this.twitterConfigButton.Click += new System.EventHandler(this.twitterConfigButton_Click);
 			// 
+			// saveCheckBox
+			// 
+			this.saveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.saveCheckBox.AutoSize = true;
+			this.saveCheckBox.Location = new System.Drawing.Point(12, 84);
+			this.saveCheckBox.MaximumSize = new System.Drawing.Size(200, 16);
+			this.saveCheckBox.MinimumSize = new System.Drawing.Size(200, 16);
+			this.saveCheckBox.Name = "saveCheckBox";
+			this.saveCheckBox.Size = new System.Drawing.Size(200, 16);
+			this.saveCheckBox.TabIndex = 8;
+			this.saveCheckBox.Text = "保存ファイル名に問題名を入れる";
+			this.saveCheckBox.UseVisualStyleBackColor = true;
+			this.saveCheckBox.CheckedChanged += new System.EventHandler(this.SaveProblemNameChanged);
+			// 
 			// ConfigForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(182, 116);
+			this.ClientSize = new System.Drawing.Size(212, 146);
+			this.Controls.Add(this.saveCheckBox);
 			this.Controls.Add(this.twitterConfigButton);
 			this.Controls.Add(this.DirectoryNameBox);
 			this.Controls.Add(this.label1);
@@ -121,8 +139,8 @@
 			this.Controls.Add(this.PassWordLabel);
 			this.Controls.Add(this.UserNameLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximumSize = new System.Drawing.Size(190, 150);
-			this.MinimumSize = new System.Drawing.Size(190, 150);
+			this.MaximumSize = new System.Drawing.Size(220, 180);
+			this.MinimumSize = new System.Drawing.Size(220, 180);
 			this.Name = "ConfigForm";
 			this.Text = "ConfigForm";
 			this.ResumeLayout(false);
@@ -140,5 +158,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox DirectoryNameBox;
 		private System.Windows.Forms.Button twitterConfigButton;
+		private System.Windows.Forms.CheckBox saveCheckBox;
 	}
 }

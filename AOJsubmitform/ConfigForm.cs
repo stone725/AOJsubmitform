@@ -15,6 +15,10 @@ namespace AOJsubmitform {
 			{
 				DirectoryNameBox.Text = MainForm.WriteDirectory;
 			}
+			if (MainForm.SaveProblemName)
+			{
+				saveCheckBox.Checked = true;
+			}
 		}
 
 		private void UserNameLabelClick(object sender, EventArgs e) {
@@ -28,13 +32,13 @@ namespace AOJsubmitform {
 		private void UserNameBoxChanged(object sender, EventArgs e) {
 			MainForm.UserName = UserNameBox.Text;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
 		}
 
 		private void PassWordBoxChanged(object sender, EventArgs e) {
 			MainForm.UserPassWord = PassWordBox.Text;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
 		}
 
 		
@@ -42,10 +46,8 @@ namespace AOJsubmitform {
 		private void DirectoryNameBoxChanged(object sender, EventArgs e)
 		{
 			MainForm.WriteDirectory = DirectoryNameBox.Text;
-			if (MainForm.UserName != "" && MainForm.UserPassWord != "") {
-				ConfigWriter configWriter = new ConfigWriter();
-				configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory);
-			}
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
 		}
 
 		private void OkButtonClick(object sender, EventArgs e) {
@@ -56,6 +58,13 @@ namespace AOJsubmitform {
 		{	
 			TwitterAttestationForm twitterAttestationForm = new TwitterAttestationForm();
 			twitterAttestationForm.Show();
+		}
+
+		private void SaveProblemNameChanged(object sender, EventArgs e)
+		{
+			MainForm.SaveProblemName = saveCheckBox.Checked;
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
 		}
 	}
 }
