@@ -128,7 +128,7 @@ namespace AOJsubmitform {
 				case 0:
 					MessageBox.Show(@"Accepted");
 					_fileWriter.Write(directoryName, fileName, SourceCodeBox.Text);
-					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text + "でACしました!\n#AOJACinfo #AOJ_AC" });
+					TwitterService.SendTweet(new SendTweetOptions { Status = UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text + "でACしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber + "&lang=jp\n#AOJACinfo #AOJ_AC" });
 					break;
 			}
 			
