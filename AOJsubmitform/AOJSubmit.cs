@@ -122,7 +122,7 @@ namespace AOJsubmitform
 					return 5;
 				case "Compile Error":
 					return 6;
-				case "Presentation Error":
+				case "WA: Presentation Error":
 					return 7;
 				case "Output Limit Exceeded":
 					return 8;
