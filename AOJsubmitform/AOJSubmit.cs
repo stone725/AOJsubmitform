@@ -52,11 +52,16 @@ namespace AOJsubmitform
 			lastrRunIdResstream.Close();
 			lastRunIdresponse.Close();
 			const string runIdStartMark = "<run_id>\n";
-			Int32 lastRunIdStartIndex = lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
-			                            runIdStartMark.Length;
-			Int32 lastRunIdEndIndex = lastSubmitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
-			String lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
+			Int32 lastRunIdStartIndex, lastRunIdEndIndex;
+			String lastRunId = "";
+			if (lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) != -1)
+			{
+				lastRunIdStartIndex = lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
+				                            runIdStartMark.Length;
+				lastRunIdEndIndex = lastSubmitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
+				lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
 
+			}
 
 			/*ポストデータの書き込み*/
 			Stream submitReqStream = submitRequest.GetRequestStream();
@@ -82,12 +87,16 @@ namespace AOJsubmitform
 				runIdStreamReader.Close();
 				runIdResStream.Close();
 				runIdResponse.Close();
-				Int32 runIdStart = submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
-				Int32 runIdEnd = submitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
-				if (lastRunId != submitResponse.Substring(runIdStart, runIdEnd - runIdStart))
+				Int32 runIdStart, runIdEnd;
+				if (submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) != -1)
 				{
-					success = true;
-					break;
+					runIdStart = submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
+					runIdEnd = submitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
+					if (lastRunId != submitResponse.Substring(runIdStart, runIdEnd - runIdStart))
+					{
+						success = true;
+						break;
+					}
 				}
 				Thread.Sleep(200);
 				challanged++;

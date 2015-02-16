@@ -5,7 +5,7 @@ using TweetSharp;
 
 namespace AOJsubmitform {
 	public partial class MainForm : Form {
-		private string _problemNumber;
+		private string _problemNumber = "";
 		public static TwitterService TwitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
 		public static OAuthRequestToken TwitterRequestToken;
 		public static string TwitterVerifier;
@@ -15,7 +15,7 @@ namespace AOJsubmitform {
 		public static string UserName = "";
 		public static string UserPassWord = "";
 		public static string WriteDirectory = "";
-		public static string ProblemName;
+		public static string ProblemName = "";
 		public static bool SaveProblemName = false;
 		private readonly FileWriter _fileWriter = new FileWriter();
 		public MainForm() {
@@ -51,6 +51,7 @@ namespace AOJsubmitform {
 				TwitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
 				
 			}
+			LanguageBox.Text = "C++";
 		}
 
 
@@ -82,6 +83,16 @@ namespace AOJsubmitform {
 				WriteDirectory += @"\\";
 			}
 			AojAccount aojuserAccount = new AojAccount(UserName, UserPassWord);
+			if (aojuserAccount.GetUserName() == "")
+			{
+				MessageBox.Show(@"アカウント名を入力してください！");
+				return;
+			}
+			if (aojuserAccount.GetUserPass() == "")
+			{
+				MessageBox.Show(@"パスワードを入力してください!");
+				return;
+			}
 			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
 			int status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";

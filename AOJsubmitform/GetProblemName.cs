@@ -21,13 +21,13 @@ namespace AOJsubmitform
 			problemInfoResStream.Close();
 			problemInfoResponse.Close();
 			const string runIdStartMark = "<name>\n";
-			Int32 problemNameStartIndex = problemInfoResString.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
+			int problemNameStartIndex = problemInfoResString.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
 										runIdStartMark.Length;
-			if (problemNameStartIndex == -1)
+			if (problemInfoResString.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) == -1)
 			{
 				return "";
 			}
-			Int32 problemNamEndIndex = problemInfoResString.IndexOf("\n", problemNameStartIndex, StringComparison.Ordinal);
+			int problemNamEndIndex = problemInfoResString.IndexOf("\n", problemNameStartIndex, StringComparison.Ordinal);
 			return problemInfoResString.Substring(problemNameStartIndex, problemNamEndIndex - problemNameStartIndex);
 		}
 	}
