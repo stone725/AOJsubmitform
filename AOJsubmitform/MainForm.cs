@@ -79,6 +79,8 @@ namespace AOJsubmitform {
 				MessageBox.Show(@"正しい問題番号を入力してください!");
 				return;
 			}
+			string[] CannotUseName = new[] {"\\", "/", ":","*", "?", "\"", "<", ">","|"		};
+			
 			if (WriteDirectory != "") {
 				WriteDirectory += @"\\";
 			}
@@ -100,6 +102,9 @@ namespace AOJsubmitform {
 			if (SaveProblemName)
 			{
 				fileName += " " + ProblemName;
+			}
+			foreach (string c in CannotUseName) {
+				fileName = fileName.Replace(c, "");
 			}
 			fileName += GetExtension.getExtension(LanguageBox.Text);
 			TopMost = true;
