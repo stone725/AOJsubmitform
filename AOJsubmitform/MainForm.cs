@@ -160,7 +160,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でWAしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
 						});
 					}
 					break;
@@ -173,7 +173,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でREしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJREinfo #AOJ_RE #AOJsubmitinfo"
 						});
 
 					}
@@ -187,7 +187,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でTLEしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJTLEinfo #AOJ_TLE #AOJsubmitinfo"
 						});
 
 					}
@@ -201,7 +201,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でMLEしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJMLEinfo #AOJ_MLE #AOJsubmitinfo"
 						});
 					}
 					break;
@@ -214,7 +214,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でCEしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJCEinfo #AOJ_CE #AOJsubmitinfo"
 						});
 
 					}
@@ -228,7 +228,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でPEしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJPEinfo #AOJ_PE #AOJsubmitinfo"
 						});
 					}
 					break;
@@ -239,7 +239,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でOLEしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJOLEinfo #AOJ_OLE #AOJsubmitinfo"
 						});
 					}
 					break;
@@ -250,7 +250,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でJNAしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJJNAinfo #AOJ_JNA #AOJsubmitinfo"
 						});
 					}
 					break;
@@ -261,7 +261,7 @@ namespace AOJsubmitform {
 							Status =
 								UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 								"でPPしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-								"&lang=jp\n#AOJACinfo #AOJ_AC"
+								"&lang=jp\n#AOJPPinfo #AOJ_PP #AOJsubmitinfo"
 						});
 					}
 					_fileWriter.Write(directoryName, fileName, "//Partial Points.\n" + SourceCodeBox.Text);
@@ -274,7 +274,7 @@ namespace AOJsubmitform {
 						Status =
 							UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
 							"でACしました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + _problemNumber +
-							"&lang=jp\n#AOJACinfo #AOJ_AC"
+							"&lang=jp\n#AOJACinfo #AOJ_AC #AOJsubmitinfo"
 					});
 					break;
 			}
