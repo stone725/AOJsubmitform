@@ -15,10 +15,8 @@ namespace AOJsubmitform {
 			{
 				DirectoryNameBox.Text = MainForm.WriteDirectory;
 			}
-			if (MainForm.SaveProblemName)
-			{
-				saveCheckBox.Checked = true;
-			}
+			saveCheckBox.Checked = MainForm.SaveProblemName;
+			TweetAllCheckBox.Checked = MainForm.TweetAll;
 		}
 
 		private void UserNameLabelClick(object sender, EventArgs e) {
@@ -32,13 +30,13 @@ namespace AOJsubmitform {
 		private void UserNameBoxChanged(object sender, EventArgs e) {
 			MainForm.UserName = UserNameBox.Text;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
 		}
 
 		private void PassWordBoxChanged(object sender, EventArgs e) {
 			MainForm.UserPassWord = PassWordBox.Text;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
 		}
 
 		
@@ -47,7 +45,7 @@ namespace AOJsubmitform {
 		{
 			MainForm.WriteDirectory = DirectoryNameBox.Text;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
 		}
 
 		private void OkButtonClick(object sender, EventArgs e) {
@@ -64,7 +62,14 @@ namespace AOJsubmitform {
 		{
 			MainForm.SaveProblemName = saveCheckBox.Checked;
 			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName);
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
+		}
+
+		private void TweetAllCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			MainForm.TweetAll = TweetAllCheckBox.Checked;
+			ConfigWriter configWriter = new ConfigWriter();
+			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
 		}
 	}
 }

@@ -32,6 +32,7 @@
 			this.DirectoryNameBox = new System.Windows.Forms.TextBox();
 			this.twitterConfigButton = new System.Windows.Forms.Button();
 			this.saveCheckBox = new System.Windows.Forms.CheckBox();
+			this.TweetAllCheckBox = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// UserNameLabel
@@ -73,7 +74,7 @@
 			// 
 			// OKButton
 			// 
-			this.OKButton.Location = new System.Drawing.Point(98, 111);
+			this.OKButton.Location = new System.Drawing.Point(111, 131);
 			this.OKButton.Name = "OKButton";
 			this.OKButton.Size = new System.Drawing.Size(72, 23);
 			this.OKButton.TabIndex = 4;
@@ -100,7 +101,7 @@
 			// 
 			// twitterConfigButton
 			// 
-			this.twitterConfigButton.Location = new System.Drawing.Point(8, 111);
+			this.twitterConfigButton.Location = new System.Drawing.Point(8, 131);
 			this.twitterConfigButton.Name = "twitterConfigButton";
 			this.twitterConfigButton.Size = new System.Drawing.Size(77, 23);
 			this.twitterConfigButton.TabIndex = 7;
@@ -111,8 +112,8 @@
 			// saveCheckBox
 			// 
 			this.saveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.saveCheckBox.AutoSize = true;
 			this.saveCheckBox.Location = new System.Drawing.Point(12, 84);
 			this.saveCheckBox.MaximumSize = new System.Drawing.Size(200, 16);
@@ -124,11 +125,23 @@
 			this.saveCheckBox.UseVisualStyleBackColor = true;
 			this.saveCheckBox.CheckedChanged += new System.EventHandler(this.SaveProblemNameChanged);
 			// 
+			// TweetAllCheckBox
+			// 
+			this.TweetAllCheckBox.AutoSize = true;
+			this.TweetAllCheckBox.Location = new System.Drawing.Point(12, 107);
+			this.TweetAllCheckBox.Name = "TweetAllCheckBox";
+			this.TweetAllCheckBox.Size = new System.Drawing.Size(138, 16);
+			this.TweetAllCheckBox.TabIndex = 9;
+			this.TweetAllCheckBox.Text = "AC以外でもツイートする";
+			this.TweetAllCheckBox.UseVisualStyleBackColor = true;
+			this.TweetAllCheckBox.CheckedChanged += new System.EventHandler(this.TweetAllCheckBox_CheckedChanged);
+			// 
 			// ConfigForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(212, 146);
+			this.ClientSize = new System.Drawing.Size(212, 166);
+			this.Controls.Add(this.TweetAllCheckBox);
 			this.Controls.Add(this.saveCheckBox);
 			this.Controls.Add(this.twitterConfigButton);
 			this.Controls.Add(this.DirectoryNameBox);
@@ -139,8 +152,8 @@
 			this.Controls.Add(this.PassWordLabel);
 			this.Controls.Add(this.UserNameLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-			this.MaximumSize = new System.Drawing.Size(220, 180);
-			this.MinimumSize = new System.Drawing.Size(220, 180);
+			this.MaximumSize = new System.Drawing.Size(220, 200);
+			this.MinimumSize = new System.Drawing.Size(220, 200);
 			this.Name = "ConfigForm";
 			this.Text = "ConfigForm";
 			this.ResumeLayout(false);
@@ -159,5 +172,6 @@
 		private System.Windows.Forms.TextBox DirectoryNameBox;
 		private System.Windows.Forms.Button twitterConfigButton;
 		private System.Windows.Forms.CheckBox saveCheckBox;
+		private System.Windows.Forms.CheckBox TweetAllCheckBox;
 	}
 }
