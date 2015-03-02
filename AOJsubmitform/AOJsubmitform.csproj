@@ -74,9 +74,10 @@
   <ItemGroup>
     <Compile Include="AOJAccount.cs" />
     <Compile Include="AOJSubmit.cs" />
-    <Compile Include="ConfigWriter.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="FileWriter.cs" />
-    <Compile Include="GetProblemName.cs" />
+    <Compile Include="AojGetProblemName.cs" />
+    <Compile Include="JudgeStatus.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

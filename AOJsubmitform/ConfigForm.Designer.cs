@@ -43,7 +43,6 @@
 			this.UserNameLabel.Size = new System.Drawing.Size(57, 12);
 			this.UserNameLabel.TabIndex = 0;
 			this.UserNameLabel.Text = "ユーザー名";
-			this.UserNameLabel.Click += new System.EventHandler(this.UserNameLabelClick);
 			// 
 			// PassWordLabel
 			// 
@@ -53,7 +52,6 @@
 			this.PassWordLabel.Size = new System.Drawing.Size(52, 12);
 			this.PassWordLabel.TabIndex = 1;
 			this.PassWordLabel.Text = "パスワード";
-			this.PassWordLabel.Click += new System.EventHandler(this.PassWordLabelClick);
 			// 
 			// UserNameBox
 			// 
@@ -61,7 +59,6 @@
 			this.UserNameBox.Name = "UserNameBox";
 			this.UserNameBox.Size = new System.Drawing.Size(124, 19);
 			this.UserNameBox.TabIndex = 2;
-			this.UserNameBox.TextChanged += new System.EventHandler(this.UserNameBoxChanged);
 			// 
 			// PassWordBox
 			// 
@@ -70,7 +67,6 @@
 			this.PassWordBox.Size = new System.Drawing.Size(124, 19);
 			this.PassWordBox.TabIndex = 3;
 			this.PassWordBox.UseSystemPasswordChar = true;
-			this.PassWordBox.TextChanged += new System.EventHandler(this.PassWordBoxChanged);
 			// 
 			// OKButton
 			// 
@@ -97,7 +93,6 @@
 			this.DirectoryNameBox.Name = "DirectoryNameBox";
 			this.DirectoryNameBox.Size = new System.Drawing.Size(124, 19);
 			this.DirectoryNameBox.TabIndex = 6;
-			this.DirectoryNameBox.TextChanged += new System.EventHandler(this.DirectoryNameBoxChanged);
 			// 
 			// twitterConfigButton
 			// 
@@ -107,7 +102,7 @@
 			this.twitterConfigButton.TabIndex = 7;
 			this.twitterConfigButton.Text = "twitter 認証";
 			this.twitterConfigButton.UseVisualStyleBackColor = true;
-			this.twitterConfigButton.Click += new System.EventHandler(this.twitterConfigButton_Click);
+      this.twitterConfigButton.Click += new System.EventHandler(this.twitterConfigButton_Click);
 			// 
 			// saveCheckBox
 			// 
@@ -123,7 +118,6 @@
 			this.saveCheckBox.TabIndex = 8;
 			this.saveCheckBox.Text = "保存ファイル名に問題名を入れる";
 			this.saveCheckBox.UseVisualStyleBackColor = true;
-			this.saveCheckBox.CheckedChanged += new System.EventHandler(this.SaveProblemNameChanged);
 			// 
 			// TweetAllCheckBox
 			// 
@@ -134,7 +128,6 @@
 			this.TweetAllCheckBox.TabIndex = 9;
 			this.TweetAllCheckBox.Text = "AC以外でもツイートする";
 			this.TweetAllCheckBox.UseVisualStyleBackColor = true;
-			this.TweetAllCheckBox.CheckedChanged += new System.EventHandler(this.TweetAllCheckBox_CheckedChanged);
 			// 
 			// ConfigForm
 			// 
