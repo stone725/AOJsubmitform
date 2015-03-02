@@ -124,7 +124,7 @@ namespace AOJsubmitform {
     }
 
 		private void SubmitButtonClick(object sender, EventArgs e) {
-      ProblemName = GetProblemName.Getproblemname(_problemNumber);
+      ProblemName = new AojGetProblemName().Getproblemname(_problemNumber);
       if (!CanSubmit())
         return;
       AojAccount aojuserAccount = new AojAccount(Config.Usename, Config.Password);
