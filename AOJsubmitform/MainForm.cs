@@ -132,7 +132,16 @@ namespace AOJsubmitform {
 			}
 			//提出処理
 			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
-			var status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
+      JudgeStatus status;
+      try
+      {
+        status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
+      }
+      catch 
+      {
+        MessageBox.Show("Submit Error occured!");
+        return;
+      }
 			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
 			string fileName = _problemNumber;
 			if (SaveProblemName)
@@ -146,17 +155,17 @@ namespace AOJsubmitform {
 			}
 			fileName += GetExtension.getExtension(LanguageBox.Text);
 			TopMost = true;
-			MessageBox.Show(status.ToDisplayString());
-			if (status == JudgeStatus.Accepted || status == JudgeStatus.ParialPoints || TweetAll)
+      MessageBox.Show(status.ToDisplayString());
+      if (status == JudgeStatus.Accepted || status == JudgeStatus.ParialPoints || TweetAll)
       {
-				TwitterService.SendTweet(new SendTweetOptions
-				{
-					Status =
-						UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
-						"で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + 
+        TwitterService.SendTweet(new SendTweetOptions
+        {
+          Status =
+            UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
+            "で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" +
             _problemNumber + "&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
-				});
-			}
+        });
+      }
 			Close();
 		}
 		

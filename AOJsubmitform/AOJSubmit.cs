@@ -8,11 +8,18 @@ using System.Threading;
 
 namespace AOJsubmitform
 {
+  public class AojSubmitException : Exception
+  {
+    public AojSubmitException() : base() { }
+    public AojSubmitException(string message) : base(message) { }
+    public AojSubmitException(string message, Exception innerException) : base(message, innerException) { }
+  }
+
 	public class AojSubmit
 	{
 		private readonly AojAccount _account;
     private readonly TimeSpan _timeout = new TimeSpan(0, 0, 10);
-    private readonly TimeSpan maxWatingJudgeTime = new TimeSpan(0, 0, 40);
+    private readonly TimeSpan maxWatingJudgeTime = new TimeSpan(0, 0, 20);
     private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS"); 
     private readonly string _submitEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
     private readonly string _responseEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
@@ -118,7 +125,7 @@ namespace AOJsubmitform
       }
       if (!success)
       {
-       // return -1;
+        throw new AojSubmitException();
       }
 
       return ExtractLastSubmitResult(GetSubmit());
@@ -134,7 +141,14 @@ namespace AOJsubmitform
 			submitReqStream.Close();
 
       var lastRunId = GetLastRunId();
-			return JudgeStatusHelper.FromString(ExtractLastSubmitResult(GetSubmit()));
+      try
+      {
+        return JudgeStatusHelper.FromString(ExtractLastSubmitResult(GetSubmit()));
+      }
+      catch(Exception e)
+      {
+        throw new AojSubmitException("", e);
+      }
 		}
 	}
 }
