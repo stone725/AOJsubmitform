@@ -23,18 +23,18 @@ namespace AOJsubmitform
 
   public static class JudgeStatusHelper
   {
-    private static Dictionary<JudgeStatus, string> toStringTable = new Dictionary<JudgeStatus,string>();
+    private static Dictionary<JudgeStatus, string> toStringTable = new Dictionary<JudgeStatus, string>();
     private static Dictionary<JudgeStatus, string> toAbbreviationTable = new Dictionary<JudgeStatus, string>();
-    private static Dictionary<string, JudgeStatus> fromStringTable = new Dictionary<string,JudgeStatus>();
+    private static Dictionary<string, JudgeStatus> fromStringTable = new Dictionary<string, JudgeStatus>();
 
     static JudgeStatusHelper()
     {
-      foreach(var value in Enum.GetValues(typeof(JudgeStatus)))
+      foreach (var value in Enum.GetValues(typeof(JudgeStatus)))
       {
         var name = Enum.GetName(typeof(JudgeStatus), value);
         var sb = new StringBuilder();
         var abbrSb = new StringBuilder();
-        foreach(var c in name)
+        foreach (var c in name)
         {
           if (char.IsUpper(c))
           {
@@ -58,7 +58,7 @@ namespace AOJsubmitform
 
     public static string ToDisplayString(this JudgeStatus status)
     {
-      if(toStringTable.ContainsKey(status))
+      if (toStringTable.ContainsKey(status))
         return toStringTable[status];
       throw new ArgumentException();
     }

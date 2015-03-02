@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace AOJsubmitform {
-	public class Config
+namespace AOJsubmitform
+{
+  public class Config
   {
     public string Usename { get; set; }
     public string Password { get; set; }
@@ -12,22 +13,22 @@ namespace AOJsubmitform {
 
     public string TwitterToken { get; set; }
     public string TwitterTokenSecret { get; set; }
-    
+
     public Config()
     {
       Usename = Password = SaveDirectory = TwitterToken = TwitterTokenSecret = "";
     }
 
-		public void Write()
-		{
-			File.WriteAllBytes("UserName.bin", Encoding.Unicode.GetBytes(Usename));
-			File.WriteAllBytes("UserPassWord.bin", Encoding.Unicode.GetBytes(Password));
-			File.WriteAllBytes("WriteDirectory.bin", Encoding.Unicode.GetBytes(SaveDirectory));
-			File.WriteAllBytes("SaveProblemName.bin", Encoding.Unicode.GetBytes(IsSaveProblemName ? "save" : ""));
-			File.WriteAllBytes("TweetAll.bin", Encoding.Unicode.GetBytes(IsTweetAll ? "tweet" : ""));
-			File.WriteAllBytes("TwitterToken.bin", Encoding.Unicode.GetBytes(TwitterToken));
-			File.WriteAllBytes("TwitterTokenSecret.bin", Encoding.Unicode.GetBytes(TwitterTokenSecret)); 
-		}
+    public void Write()
+    {
+      File.WriteAllBytes("UserName.bin", Encoding.Unicode.GetBytes(Usename));
+      File.WriteAllBytes("UserPassWord.bin", Encoding.Unicode.GetBytes(Password));
+      File.WriteAllBytes("WriteDirectory.bin", Encoding.Unicode.GetBytes(SaveDirectory));
+      File.WriteAllBytes("SaveProblemName.bin", Encoding.Unicode.GetBytes(IsSaveProblemName ? "save" : ""));
+      File.WriteAllBytes("TweetAll.bin", Encoding.Unicode.GetBytes(IsTweetAll ? "tweet" : ""));
+      File.WriteAllBytes("TwitterToken.bin", Encoding.Unicode.GetBytes(TwitterToken));
+      File.WriteAllBytes("TwitterTokenSecret.bin", Encoding.Unicode.GetBytes(TwitterTokenSecret));
+    }
 
     public void Load()
     {
@@ -68,5 +69,5 @@ namespace AOJsubmitform {
       }
       Write();
     }
-	}
+  }
 }

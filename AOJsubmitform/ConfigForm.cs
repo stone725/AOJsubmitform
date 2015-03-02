@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AOJsubmitform {
-	public partial class ConfigForm : Form {
+namespace AOJsubmitform
+{
+  public partial class ConfigForm : Form
+  {
     private Config config;
 
-		public ConfigForm(Config config) {
-			InitializeComponent();
+    public ConfigForm(Config config)
+    {
+      InitializeComponent();
       this.config = config;
       Initialize();
-		}
+    }
 
     private void Initialize()
     {
@@ -35,10 +38,10 @@ namespace AOJsubmitform {
       twitterAttestationForm.Show();
     }
 
-		private void OkButtonClick(object sender, EventArgs e)
+    private void OkButtonClick(object sender, EventArgs e)
     {
       Save();
-			Close();
-		}
-	}
+      Close();
+    }
+  }
 }
