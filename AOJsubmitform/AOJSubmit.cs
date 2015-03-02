@@ -11,134 +11,130 @@ namespace AOJsubmitform
 	public class AojSubmit
 	{
 		private readonly AojAccount _account;
+    private readonly TimeSpan _timeout = new TimeSpan(0, 0, 10);
+    private readonly TimeSpan maxWatingJudgeTime = new TimeSpan(0, 0, 40);
+    private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS"); 
+    private readonly string _submitEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
+    private readonly string _responseEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
+    private readonly string _runIdStartMark = "<run_id>\n";
+    private readonly string _statusStartMark = "<status>\n";
+
+    private string ResponseUrl
+    {
+      get
+      {
+        return _responseEndpoint + _account.GetUserName(); 
+      }
+    }
 
 		public AojSubmit(AojAccount aojAccount)
 		{
 			_account = aojAccount;
 		}
 
+    private byte[] BuildSubmitData(string problemNo, string language, string sourceCode)
+    {
+      Hashtable submitConfig = new Hashtable();
+      submitConfig["userID"] = WebUtility.UrlEncode(_account.GetUserName());
+      submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
+      submitConfig["problemNO"] = WebUtility.UrlEncode(problemNo);
+      submitConfig["language"] = WebUtility.UrlEncode(language);
+      submitConfig["password"] = WebUtility.UrlEncode(_account.GetUserPass());
+      var submitParam = submitConfig.Keys.Cast<string>().Aggregate("", (current, key) => current + String.Format("{0}={1}&", key, submitConfig[key]));
+      return _encoding.GetBytes(submitParam);
+    }
 
+    private HttpWebRequest BuildRequest(byte[] data)
+    {
+      HttpWebRequest request = WebRequest.Create(_submitEndpoint) as HttpWebRequest;
 
-		public int Submit(string problemNo, string language, string sourceCode)
+      request.Method = "POST";
+      request.Timeout = (int)_timeout.TotalMilliseconds;
+      request.ContentType = "application/x-www-form-urlencoded";
+      request.ContentLength = data.Length;
+
+      return request;
+    }
+
+    private string ExtractLastSubmitId(string submitResponse)
+    {
+      Int32 lastRunIdStartIndex, lastRunIdEndIndex;
+      String lastRunId = "";
+      if (submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) != -1)
+      {
+        lastRunIdStartIndex = submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) + 
+          _runIdStartMark.Length;
+        lastRunIdEndIndex = submitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
+        lastRunId = submitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
+      }
+      return lastRunId;
+    }
+    
+    private string ExtractLastSubmitResult(string submitResponse)
+    {
+      var start = submitResponse.IndexOf(_statusStartMark,
+        submitResponse.IndexOf(_statusStartMark, StringComparison.Ordinal) + _statusStartMark.Length,
+        StringComparison.Ordinal
+      ) + _statusStartMark.Length;
+      var end = submitResponse.IndexOf("\n</status>", start, StringComparison.Ordinal);
+      return submitResponse.Substring(start, end - start);
+    }
+
+    private string GetSubmit()
+    {	
+      var runIdRequest = WebRequest.Create(ResponseUrl) as HttpWebRequest;
+      runIdRequest.Timeout = (int)_timeout.TotalMilliseconds;
+      var lastrRunIdResstream = runIdRequest.GetResponse().GetResponseStream();
+      using (var reader = new StreamReader(lastrRunIdResstream, _encoding))
+      {
+        return reader.ReadToEnd();
+      }
+    }
+
+    private string GetLastRunId()
+    {
+      return ExtractLastSubmitId(GetSubmit());
+    }
+
+    private string GetJudgeResult(string lastRunId)
+    {
+
+      /*提出結果を格納する変数*/
+      string submitResponse = "";
+      int challanged = 0;
+      bool success = false;
+
+      //200ms * 100 = 20000ms→20sより100回試行
+      while (challanged <= (maxWatingJudgeTime.TotalMilliseconds / 200))
+      {
+        submitResponse = GetSubmit();
+        if (lastRunId != ExtractLastSubmitId(submitResponse))
+        {
+          success = true;
+          break;
+        }
+        Thread.Sleep(200);
+        challanged++;
+      }
+      if (!success)
+      {
+       // return -1;
+      }
+
+      return ExtractLastSubmitResult(GetSubmit());
+    }
+
+    public JudgeStatus Submit(string problemNo, string language, string sourceCode)
 		{
-			HttpWebRequest submitRequest =
-				(HttpWebRequest) WebRequest.Create("http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit");
-			Encoding enc = Encoding.GetEncoding("Shift_JIS");
-			Hashtable submitConfig = new Hashtable();
-			submitConfig["userID"] = WebUtility.UrlEncode(_account.GetUserName());
-			submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
-			submitConfig["problemNO"] = WebUtility.UrlEncode(problemNo);
-			submitConfig["language"] = WebUtility.UrlEncode(language);
-			submitConfig["password"] = WebUtility.UrlEncode(_account.GetUserPass());
-			submitRequest.Method = "POST";
-
-			submitRequest.Timeout = 1000000000;
-			String submitParam = submitConfig.Keys.Cast<string>().Aggregate("", (current, key) => current + String.Format("{0}={1}&", key, submitConfig[key]));
-			Byte[] submitData = Encoding.GetEncoding("Shift_JIS").GetBytes(submitParam);
-			submitRequest.ContentType = "application/x-www-form-urlencoded";
-			submitRequest.ContentLength = submitData.Length;
-			submitConfig.Clear();
-
-
-			/*これから行う提出の一つ前の提出の提出番号を取得する*/
-			String responseUrl = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=" + _account.GetUserName();
-			HttpWebRequest lastRunIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);
-			lastRunIdRequest.Timeout = 1000000000;
-			WebResponse lastRunIdresponse = lastRunIdRequest.GetResponse();
-			Stream lastrRunIdResstream = lastRunIdresponse.GetResponseStream();
-			StreamReader lastRunIdStreamReader = new StreamReader(lastrRunIdResstream, enc);
-			String lastSubmitResponse = lastRunIdStreamReader.ReadToEnd();
-			lastRunIdStreamReader.Close();
-			lastrRunIdResstream.Close();
-			lastRunIdresponse.Close();
-			const string runIdStartMark = "<run_id>\n";
-			Int32 lastRunIdStartIndex, lastRunIdEndIndex;
-			String lastRunId = "";
-			if (lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) != -1)
-			{
-				lastRunIdStartIndex = lastSubmitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) +
-				                            runIdStartMark.Length;
-				lastRunIdEndIndex = lastSubmitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
-				lastRunId = lastSubmitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
-
-			}
-
-			/*ポストデータの書き込み*/
+      var data = BuildSubmitData(problemNo, language, sourceCode);
+      var submitRequest = BuildRequest(data);
+      
 			Stream submitReqStream = submitRequest.GetRequestStream();
-			submitReqStream.Write(submitData, 0, submitData.Length);
+			submitReqStream.Write(data, 0, data.Length);
 			submitReqStream.Close();
 
-			/*レスポンスの取得と読み込み*/
-
-			/*提出結果を格納する変数*/
-			string submitResponse = "";
-			int challanged = 0;
-			bool success = false;
-
-			//200ms * 100 = 20000ms→20sより100回試行
-			while (challanged <= 100)
-			{
-				HttpWebRequest runIdRequest = (HttpWebRequest) WebRequest.Create(responseUrl);
-				runIdRequest.Timeout = 1000000000;
-				WebResponse runIdResponse = runIdRequest.GetResponse();
-				Stream runIdResStream = runIdResponse.GetResponseStream();
-				StreamReader runIdStreamReader = new StreamReader(runIdResStream, enc);
-				submitResponse = runIdStreamReader.ReadToEnd();
-				runIdStreamReader.Close();
-				runIdResStream.Close();
-				runIdResponse.Close();
-				Int32 runIdStart, runIdEnd;
-				if (submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) != -1)
-				{
-					runIdStart = submitResponse.IndexOf(runIdStartMark, 0, StringComparison.Ordinal) + runIdStartMark.Length;
-					runIdEnd = submitResponse.IndexOf("\n", runIdStart, StringComparison.Ordinal);
-					if (lastRunId != submitResponse.Substring(runIdStart, runIdEnd - runIdStart))
-					{
-						success = true;
-						break;
-					}
-				}
-				Thread.Sleep(200);
-				challanged++;
-			}
-			if (!success)
-			{
-				return -1;
-			}
-			/*提出結果の取得*/
-			const string statusStartMark = "<status>\n";
-			Int32 statusStartIndex =
-				submitResponse.IndexOf(statusStartMark,
-					submitResponse.IndexOf(statusStartMark, StringComparison.Ordinal) + statusStartMark.Length,
-					StringComparison.Ordinal) + statusStartMark.Length;
-			Int32 statusIdEndIndex = submitResponse.IndexOf("\n</status>", statusStartIndex, StringComparison.Ordinal);
-			String submitResult = submitResponse.Substring(statusStartIndex, statusIdEndIndex - statusStartIndex);
-
-			/*提出結果の表示*/
-			switch (submitResult)
-			{
-				case "Accepted":
-					return 0;
-				case "Partial Points":
-					return 1;
-				case "Wrong Answer":
-					return 2;
-				case "Runtime Error":
-					return 3;
-				case "Time Limit Exceeded":
-					return 4;
-				case "Memory Limit Exceeded":
-					return 5;
-				case "Compile Error":
-					return 6;
-				case "WA: Presentation Error":
-					return 7;
-				case "Output Limit Exceeded":
-					return 8;
-				case "Judge Not Available":
-					return 9;
-			}
-			return -1;
+      var lastRunId = GetLastRunId();
+			return JudgeStatusHelper.FromString(ExtractLastSubmitResult(GetSubmit()));
 		}
 	}
 }
