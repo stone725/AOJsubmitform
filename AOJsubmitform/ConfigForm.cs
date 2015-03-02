@@ -30,6 +30,7 @@ namespace AOJsubmitform
       config.SaveDirectory = DirectoryNameBox.Text;
       config.IsSaveProblemName = saveCheckBox.Checked;
       config.IsTweetAll = TweetAllCheckBox.Checked;
+      config.Write();
     }
 
     private void twitterConfigButton_Click(object sender, EventArgs e)
