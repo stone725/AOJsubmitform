@@ -15,7 +15,6 @@ namespace AOJsubmitform {
     public Config Config = new Config();
 
 		public static string ProblemName = "";
-		private readonly FileWriter _fileWriter = new FileWriter();
 		public MainForm() {
 			InitializeComponent();
 			//引数付きで実行されたとき引数のPATHを捜索しファイルを読み込む
@@ -48,83 +47,119 @@ namespace AOJsubmitform {
 
 		}
 
+    private bool CanSubmit()
+    {
+      //ソースコードが入力されていなかった場合
+      if (SourceCodeBox.Text == "")
+      {
+        MessageBox.Show(@"一切入力していないソースコードは提出できません！");
+        return false;
+      }
+      //問題番号が不十分な場合
+      if (_problemNumber.Length < 4)
+      {
+        MessageBox.Show(@"問題番号を入力してください!");
+        return false;
+      }
+      //問題が存在していなかった場合
+      if (ProblemName == "")
+      {
+        MessageBox.Show(@"正しい問題番号を入力してください!");
+        return false;
+      }
+      //AOJアカウントの取得
+      //ユーザー名が入力されていなかった場合
+      if (Config.Usename == "")
+      {
+        MessageBox.Show(@"アカウント名を入力してください！");
+        return false;
+      }
+      //ユーザーのパスワードが入力されていなかった場合
+      if (Config.Password == "")
+      {
+        MessageBox.Show(@"パスワードを入力してください!");
+        return false;
+      }
+      return true;
+    }
+
+    private string buildFileName()
+    {
+      string fileName = _problemNumber;
+      if (Config.IsSaveProblemName)
+      {
+        fileName += " " + ProblemName;
+      }
+      //問題名を保存する設定にしていて使用できない文字が含まれていた場合その文字を排除する
+      string[] CannotUseName = new[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
+      foreach (string c in CannotUseName)
+      {
+        fileName = fileName.Replace(c, "");
+      }
+      return fileName + GetExtension.getExtension(LanguageBox.Text);
+    }
+
+    private string buildDirectoryName()
+    {
+      var directoryName = "";
+      if (Config.SaveDirectory != "")
+        directoryName = Config.SaveDirectory + @"\\";
+	    return directoryName + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
+    }
+
+    private void TweetStatus(JudgeStatus status)
+    {
+      TwitterService.SendTweet(new SendTweetOptions
+      {
+        Status =
+          Config.Usename + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
+          "で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" +
+          _problemNumber + "&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
+      });
+    }
+
+    private void SaveSourceCode(string sourceCode)
+    {
+      new FileWriter().Write(buildDirectoryName(), buildFileName(), sourceCode);
+    }
+
 		private void SubmitButtonClick(object sender, EventArgs e) {
-			//ソースコードが入力されていなかった場合
-			if (SourceCodeBox.Text == "") {
-				MessageBox.Show(@"一切入力していないソースコードは提出できません！");
-				return;
-			}
-			//問題番号が不十分な場合
-			if (_problemNumber.Length < 4) {
-				MessageBox.Show(@"問題番号を入力してください!");
-				return;
-			}
-			ProblemName = GetProblemName.Getproblemname(_problemNumber);
-			//問題が存在していなかった場合
-			if (ProblemName == "")
-			{
-				MessageBox.Show(@"正しい問題番号を入力してください!");
-				return;
-			}
-			//AOJアカウントの取得
-			AojAccount aojuserAccount = new AojAccount(Config.Usename, Config.Password);
-			//ユーザー名が入力されていなかった場合
-			if (aojuserAccount.GetUserName() == "")
-			{
-				MessageBox.Show(@"アカウント名を入力してください！");
-				return;
-			}
-			//ユーザーのパスワードが入力されていなかった場合
-			if (aojuserAccount.GetUserPass() == "")
-			{
-				MessageBox.Show(@"パスワードを入力してください!");
-				return;
-			}
-			//保存するディレクトリ名が空ではなかった場合そのディレクトリにフォルダを保存するようにする
-			if (Config.SaveDirectory != "") {
-				Config.SaveDirectory += @"\\";
-			}
-			//提出処理
-			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
+      ProblemName = GetProblemName.Getproblemname(_problemNumber);
+      if (!CanSubmit())
+        return;
+      AojAccount aojuserAccount = new AojAccount(Config.Usename, Config.Password);
+
       JudgeStatus status;
       try
       {
-        status = aojSubmit.Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
+        status = new AojSubmit(aojuserAccount).Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
       }
       catch 
       {
         MessageBox.Show("Submit Error occured!");
         return;
       }
-			string directoryName = Config.SaveDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
-			string fileName = _problemNumber;
-			if (Config.IsSaveProblemName)
-			{
-				fileName += " " + ProblemName;
-			}
-			//問題名を保存する設定にしていて使用できない文字が含まれていた場合その文字を排除する
-			string[] CannotUseName = new[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
-			foreach (string c in CannotUseName) {
-				fileName = fileName.Replace(c, "");
-			}
-			fileName += GetExtension.getExtension(LanguageBox.Text);
+
 			TopMost = true;
       MessageBox.Show(status.ToDisplayString());
-      if (status == JudgeStatus.Accepted || status == JudgeStatus.ParialPoints || Config.IsTweetAll)
+      switch(status)
       {
-        TwitterService.SendTweet(new SendTweetOptions
-        {
-          Status =
-            Config.Usename + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
-            "で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" +
-            _problemNumber + "&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
-        });
+        case JudgeStatus.Accepted:
+          TweetStatus(status);
+          SaveSourceCode(SourceCodeBox.Text);
+          break;
+        case JudgeStatus.ParialPoints:
+          TweetStatus(status);
+          SaveSourceCode("//Partial Points.\n"  + SourceCodeBox.Text);
+          break;
+        default:
+          if (Config.IsTweetAll)
+            TweetStatus(status);
+          break;
       }
 			Close();
 		}
 		
-		private void SourceCodeChanged(object sender, EventArgs e) {
-		}
 		private void ConfigButtonClick(object sender, EventArgs e) {
 			ConfigForm configForm2 = new ConfigForm(Config);
 			configForm2.Show();
