@@ -4,48 +4,53 @@ using System.Text;
 using System.Windows.Forms;
 using TweetSharp;
 
-namespace AOJsubmitform {
-	public partial class MainForm : Form {
-		private string _problemNumber = "";
-		public static TwitterService TwitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
-		public static OAuthRequestToken TwitterRequestToken;
-		public static string TwitterVerifier;
-		public static OAuthAccessToken TwitterAccess;
+namespace AOJsubmitform
+{
+  public partial class MainForm : Form
+  {
+    private string _problemNumber = "";
+    public static TwitterService TwitterService = new TwitterService("pE7l8lWq5dtB8kpx4TmeCC52M", "y11AazZjk43jHOAK2TzVX4nk1R397kjWVNmtRHs94e5HgwuLFy");
+    public static OAuthRequestToken TwitterRequestToken;
+    public static string TwitterVerifier;
+    public static OAuthAccessToken TwitterAccess;
 
     public Config Config = new Config();
 
-		public static string ProblemName = "";
-		public MainForm() {
-			InitializeComponent();
-			//引数付きで実行されたとき引数のPATHを捜索しファイルを読み込む
-			if (Program.FileName != "")
-			{
-				if (File.Exists(Program.FileName))
-				{
-					StreamReader sourceCodeReader = new StreamReader(Program.FileName);
-					SourceCodeBox.Text = sourceCodeReader.ReadToEnd();
-					sourceCodeReader.Close();
-				}
-				else
-				{
-					MessageBox.Show(@"読み込むファイルがありません!");
-				}
-			}
+    public static string ProblemName = "";
+    public MainForm()
+    {
+      InitializeComponent();
+      //引数付きで実行されたとき引数のPATHを捜索しファイルを読み込む
+      if (Program.FileName != "")
+      {
+        if (File.Exists(Program.FileName))
+        {
+          StreamReader sourceCodeReader = new StreamReader(Program.FileName);
+          SourceCodeBox.Text = sourceCodeReader.ReadToEnd();
+          sourceCodeReader.Close();
+        }
+        else
+        {
+          MessageBox.Show(@"読み込むファイルがありません!");
+        }
+      }
       Config.Load();
       if (Config.TwitterToken != "" && Config.TwitterTokenSecret != "")
         TwitterService.AuthenticateWith(Config.TwitterToken, Config.TwitterTokenSecret);
-			//言語ボックスの初期化
-			LanguageBox.Text = "C++";
-		}
+      //言語ボックスの初期化
+      LanguageBox.Text = "C++";
+    }
 
-		//問題番号が変更されたとき
-		private void ProblemNumberBoxChanged(object sender, EventArgs e) {
-			_problemNumber = ProblemNumberBox.Text;
-		}
-		
-		private void LanguageboxChanged(object sender, EventArgs e) {
+    //問題番号が変更されたとき
+    private void ProblemNumberBoxChanged(object sender, EventArgs e)
+    {
+      _problemNumber = ProblemNumberBox.Text;
+    }
 
-		}
+    private void LanguageboxChanged(object sender, EventArgs e)
+    {
+
+    }
 
     private bool CanSubmit()
     {
@@ -104,7 +109,7 @@ namespace AOJsubmitform {
       var directoryName = "";
       if (Config.SaveDirectory != "")
         directoryName = Config.SaveDirectory + @"\\";
-	    return directoryName + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
+      return directoryName + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
     }
 
     private void TweetStatus(JudgeStatus status)
@@ -123,7 +128,8 @@ namespace AOJsubmitform {
       new FileWriter().Write(buildDirectoryName(), buildFileName(), sourceCode);
     }
 
-		private void SubmitButtonClick(object sender, EventArgs e) {
+    private void SubmitButtonClick(object sender, EventArgs e)
+    {
       ProblemName = new AojGetProblemName().Getproblemname(_problemNumber);
       if (!CanSubmit())
         return;
@@ -134,15 +140,15 @@ namespace AOJsubmitform {
       {
         status = new AojSubmit(aojuserAccount).Submit(_problemNumber, LanguageBox.Text, SourceCodeBox.Text);
       }
-      catch 
+      catch
       {
         MessageBox.Show("Submit Error occured!");
         return;
       }
 
-			TopMost = true;
+      TopMost = true;
       MessageBox.Show(status.ToDisplayString());
-      switch(status)
+      switch (status)
       {
         case JudgeStatus.Accepted:
           TweetStatus(status);
@@ -150,20 +156,21 @@ namespace AOJsubmitform {
           break;
         case JudgeStatus.ParialPoints:
           TweetStatus(status);
-          SaveSourceCode("//Partial Points.\n"  + SourceCodeBox.Text);
+          SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);
           break;
         default:
           if (Config.IsTweetAll)
             TweetStatus(status);
           break;
       }
-			Close();
-		}
-		
-		private void ConfigButtonClick(object sender, EventArgs e) {
-			ConfigForm configForm2 = new ConfigForm(Config);
-			configForm2.Show();
-		}
+      Close();
+    }
 
-	}
+    private void ConfigButtonClick(object sender, EventArgs e)
+    {
+      ConfigForm configForm2 = new ConfigForm(Config);
+      configForm2.Show();
+    }
+
+  }
 }

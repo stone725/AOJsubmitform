@@ -15,12 +15,12 @@ namespace AOJsubmitform
     public AojSubmitException(string message, Exception innerException) : base(message, innerException) { }
   }
 
-	public class AojSubmit
-	{
-		private readonly AojAccount _account;
+  public class AojSubmit
+  {
+    private readonly AojAccount _account;
     private readonly TimeSpan _timeout = new TimeSpan(0, 0, 10);
     private readonly TimeSpan maxWatingJudgeTime = new TimeSpan(0, 0, 20);
-    private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS"); 
+    private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS");
     private readonly string _submitEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
     private readonly string _responseEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
     private readonly string _runIdStartMark = "<run_id>\n";
@@ -30,14 +30,14 @@ namespace AOJsubmitform
     {
       get
       {
-        return _responseEndpoint + _account.GetUserName(); 
+        return _responseEndpoint + _account.GetUserName();
       }
     }
 
-		public AojSubmit(AojAccount aojAccount)
-		{
-			_account = aojAccount;
-		}
+    public AojSubmit(AojAccount aojAccount)
+    {
+      _account = aojAccount;
+    }
 
     private byte[] BuildSubmitData(string problemNo, string language, string sourceCode)
     {
@@ -69,14 +69,14 @@ namespace AOJsubmitform
       String lastRunId = "";
       if (submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) != -1)
       {
-        lastRunIdStartIndex = submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) + 
+        lastRunIdStartIndex = submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) +
           _runIdStartMark.Length;
         lastRunIdEndIndex = submitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
         lastRunId = submitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
       }
       return lastRunId;
     }
-    
+
     private string ExtractLastSubmitResult(string submitResponse)
     {
       var start = submitResponse.IndexOf(_statusStartMark,
@@ -88,7 +88,7 @@ namespace AOJsubmitform
     }
 
     private string GetSubmit()
-    {	
+    {
       var runIdRequest = WebRequest.Create(ResponseUrl) as HttpWebRequest;
       runIdRequest.Timeout = (int)_timeout.TotalMilliseconds;
       var lastrRunIdResstream = runIdRequest.GetResponse().GetResponseStream();
@@ -132,23 +132,23 @@ namespace AOJsubmitform
     }
 
     public JudgeStatus Submit(string problemNo, string language, string sourceCode)
-		{
+    {
       var data = BuildSubmitData(problemNo, language, sourceCode);
       var submitRequest = BuildRequest(data);
-      
-			Stream submitReqStream = submitRequest.GetRequestStream();
-			submitReqStream.Write(data, 0, data.Length);
-			submitReqStream.Close();
+
+      Stream submitReqStream = submitRequest.GetRequestStream();
+      submitReqStream.Write(data, 0, data.Length);
+      submitReqStream.Close();
 
       var lastRunId = GetLastRunId();
       try
       {
         return JudgeStatusHelper.FromString(ExtractLastSubmitResult(GetSubmit()));
       }
-      catch(Exception e)
+      catch (Exception e)
       {
         throw new AojSubmitException("", e);
       }
-		}
-	}
+    }
+  }
 }
