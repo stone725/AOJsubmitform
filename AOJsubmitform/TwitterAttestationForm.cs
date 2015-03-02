@@ -3,8 +3,10 @@ using System.Windows.Forms;
 
 namespace AOJsubmitform {
 	public partial class TwitterAttestationForm : Form {
-		public TwitterAttestationForm() {
+    private Config config;
+		public TwitterAttestationForm(Config config) {
 			InitializeComponent();
+      this.config = config;
 		}
 
 		private void Form3_Load(object sender, EventArgs e) {
@@ -16,10 +18,9 @@ namespace AOJsubmitform {
 		private void GetToken() {
 			MainForm.TwitterAccess = MainForm.TwitterService.GetAccessToken(MainForm.TwitterRequestToken, MainForm.TwitterVerifier);
 			MainForm.TwitterService.AuthenticateWith(MainForm.TwitterAccess.Token, MainForm.TwitterAccess.TokenSecret);
-			MainForm.TwitterToken = MainForm.TwitterAccess.Token;
-			MainForm.TwitterTokenSecret = MainForm.TwitterAccess.TokenSecret;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.TwitterConfigWrite(MainForm.TwitterToken, MainForm.TwitterTokenSecret);
+		  config.TwitterToken = MainForm.TwitterAccess.Token;
+			config.TwitterTokenSecret = MainForm.TwitterAccess.TokenSecret;
+      config.Write();
 			Close();
 		}
 
@@ -34,9 +35,5 @@ namespace AOJsubmitform {
 				GetToken();//トーキンを取得.
 			}
 		}
-
-		
-
-
 	}
 }

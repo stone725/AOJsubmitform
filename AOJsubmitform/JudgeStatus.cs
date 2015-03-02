@@ -51,6 +51,9 @@ namespace AOJsubmitform
       // AOJ server will return "WA: Presentation Error" not "Presentation Error"
       var pe = toStringTable[JudgeStatus.PresentationError];
       fromStringTable["WA: " + pe] = JudgeStatus.PresentationError;
+
+      // Abbreviation of Accepted is AC
+      toAbbreviationTable[JudgeStatus.Accepted] = "AC";
     }
 
     public static string ToDisplayString(this JudgeStatus status)

@@ -3,73 +3,42 @@ using System.Windows.Forms;
 
 namespace AOJsubmitform {
 	public partial class ConfigForm : Form {
-		public ConfigForm() {
+    private Config config;
+
+		public ConfigForm(Config config) {
 			InitializeComponent();
-			if (MainForm.UserName != "") {
-				UserNameBox.Text = MainForm.UserName;
-			}
-			if (MainForm.UserPassWord != "") {
-				PassWordBox.Text = MainForm.UserPassWord;
-			}
-			if (MainForm.WriteDirectory != "")
-			{
-				DirectoryNameBox.Text = MainForm.WriteDirectory;
-			}
-			saveCheckBox.Checked = MainForm.SaveProblemName;
-			TweetAllCheckBox.Checked = MainForm.TweetAll;
+      this.config = config;
+      Initialize();
 		}
 
-		private void UserNameLabelClick(object sender, EventArgs e) {
+    private void Initialize()
+    {
+      UserNameBox.Text = config.Usename;
+      PassWordBox.Text = config.Password;
+      DirectoryNameBox.Text = config.SaveDirectory;
+      saveCheckBox.Checked = config.IsSaveProblemName;
+      TweetAllCheckBox.Checked = config.IsTweetAll;
+    }
 
-		}
+    private void Save()
+    {
+      config.Usename = UserNameBox.Text;
+      config.Password = PassWordBox.Text;
+      config.SaveDirectory = DirectoryNameBox.Text;
+      config.IsSaveProblemName = saveCheckBox.Checked;
+      config.IsTweetAll = TweetAllCheckBox.Checked;
+    }
 
-		private void PassWordLabelClick(object sender, EventArgs e) {
+    private void twitterConfigButton_Click(object sender, EventArgs e)
+    {
+      TwitterAttestationForm twitterAttestationForm = new TwitterAttestationForm(config);
+      twitterAttestationForm.Show();
+    }
 
-		}
-
-		private void UserNameBoxChanged(object sender, EventArgs e) {
-			MainForm.UserName = UserNameBox.Text;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
-		}
-
-		private void PassWordBoxChanged(object sender, EventArgs e) {
-			MainForm.UserPassWord = PassWordBox.Text;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
-		}
-
-		
-
-		private void DirectoryNameBoxChanged(object sender, EventArgs e)
-		{
-			MainForm.WriteDirectory = DirectoryNameBox.Text;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
-		}
-
-		private void OkButtonClick(object sender, EventArgs e) {
+		private void OkButtonClick(object sender, EventArgs e)
+    {
+      Save();
 			Close();
-		}
-
-		private void twitterConfigButton_Click(object sender, EventArgs e)
-		{	
-			TwitterAttestationForm twitterAttestationForm = new TwitterAttestationForm();
-			twitterAttestationForm.Show();
-		}
-
-		private void SaveProblemNameChanged(object sender, EventArgs e)
-		{
-			MainForm.SaveProblemName = saveCheckBox.Checked;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
-		}
-
-		private void TweetAllCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			MainForm.TweetAll = TweetAllCheckBox.Checked;
-			ConfigWriter configWriter = new ConfigWriter();
-			configWriter.ConfigWrite(MainForm.UserName, MainForm.UserPassWord, MainForm.WriteDirectory, MainForm.SaveProblemName, MainForm.TweetAll);
 		}
 	}
 }

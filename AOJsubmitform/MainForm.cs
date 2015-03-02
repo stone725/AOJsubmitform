@@ -11,15 +11,10 @@ namespace AOJsubmitform {
 		public static OAuthRequestToken TwitterRequestToken;
 		public static string TwitterVerifier;
 		public static OAuthAccessToken TwitterAccess;
-		public static string TwitterToken;
-		public static string TwitterTokenSecret;
-		public static string TwitterTokenUserName = "";
-		public static string UserName = "";
-		public static string UserPassWord = "";
-		public static string WriteDirectory = "";
+
+    public Config Config = new Config();
+
 		public static string ProblemName = "";
-		public static bool SaveProblemName = false;
-		public static bool TweetAll = false;
 		private readonly FileWriter _fileWriter = new FileWriter();
 		public MainForm() {
 			InitializeComponent();
@@ -37,50 +32,9 @@ namespace AOJsubmitform {
 					MessageBox.Show(@"読み込むファイルがありません!");
 				}
 			}
-			//新しい方式の設定記録ファイル（無意味なバイナリ式）から設定を呼び出す
-			if (File.Exists("UserName.bin") && File.Exists("UserPassWord.bin") && File.Exists("WriteDirectory.bin") && File.Exists("SaveProblemName.bin") && File.Exists("TweetAll.bin"))
-			{
-				UserName = Encoding.Unicode.GetString(File.ReadAllBytes("UserName.bin"));
-				UserPassWord = Encoding.Unicode.GetString(File.ReadAllBytes("UserPassWord.bin"));
-				WriteDirectory = Encoding.Unicode.GetString(File.ReadAllBytes("WriteDirectory.bin"));
-				SaveProblemName = Encoding.Unicode.GetString(File.ReadAllBytes("UserPassWord.bin")) == "save";
-				TweetAll = Encoding.Unicode.GetString(File.ReadAllBytes("TweetAll.bin")) == "tweet";
-			}
-			//旧形式の設定記録ファイルから設定を呼び出して新形式の設定記録方式に変更する
-			else if (File.Exists("Config.txt")) {
-				StreamReader configFileReader = new StreamReader("Config.txt");
-				UserName = configFileReader.ReadLine();
-				File.WriteAllBytes("UserName.bin", Encoding.Unicode.GetBytes(UserName)); 
-				UserPassWord = configFileReader.ReadLine();
-				File.WriteAllBytes("UserPassWord.bin", Encoding.Unicode.GetBytes(UserPassWord)); 
-				WriteDirectory = configFileReader.ReadLine();
-				File.WriteAllBytes("WriteDirectory.bin", Encoding.Unicode.GetBytes(WriteDirectory)); 
-				SaveProblemName = configFileReader.ReadLine() == "save";
-				File.WriteAllBytes("SaveProblemName.bin", Encoding.Unicode.GetBytes(SaveProblemName ? "save" : "")); 
-				configFileReader.Close();
-				//旧形式の設定ファイルを削除する
-				File.Delete(@"Config.txt");
-				File.WriteAllBytes("TweetAll.bin", Encoding.Unicode.GetBytes(TweetAll ? "tweet" : ""));
-			}
-			//Twitterにおける設定も同様に行う
-			if (File.Exists("TwitterToken.bin") && File.Exists("TwitterTokenSecret.bin"))
-			{
-				TwitterToken = Encoding.Unicode.GetString(File.ReadAllBytes("TwitterToken.bin"));
-				TwitterTokenSecret = Encoding.Unicode.GetString(File.ReadAllBytes("TwitterTokenSecret.bin"));
-				TwitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
-			}
-			else if (File.Exists("TwitterConfig.txt"))
-			{
-				StreamReader twitterConfigFileReader = new StreamReader("TwitterConfig.txt");
-				TwitterToken = twitterConfigFileReader.ReadLine();
-				File.WriteAllBytes("TwitterToken.bin", Encoding.Unicode.GetBytes(TwitterToken));
-				TwitterTokenSecret = twitterConfigFileReader.ReadLine();
-				File.WriteAllBytes("TwitterTokenSecret.bin", Encoding.Unicode.GetBytes(TwitterTokenSecret)); 
-				twitterConfigFileReader.Close();
-				File.Delete(@"TwitterConfig.txt");
-				TwitterService.AuthenticateWith(TwitterToken, TwitterTokenSecret);
-				
-			}
+      Config.Load();
+      if (Config.TwitterToken != "" && Config.TwitterTokenSecret != "")
+        TwitterService.AuthenticateWith(Config.TwitterToken, Config.TwitterTokenSecret);
 			//言語ボックスの初期化
 			LanguageBox.Text = "C++";
 		}
@@ -113,7 +67,7 @@ namespace AOJsubmitform {
 				return;
 			}
 			//AOJアカウントの取得
-			AojAccount aojuserAccount = new AojAccount(UserName, UserPassWord);
+			AojAccount aojuserAccount = new AojAccount(Config.Usename, Config.Password);
 			//ユーザー名が入力されていなかった場合
 			if (aojuserAccount.GetUserName() == "")
 			{
@@ -127,8 +81,8 @@ namespace AOJsubmitform {
 				return;
 			}
 			//保存するディレクトリ名が空ではなかった場合そのディレクトリにフォルダを保存するようにする
-			if (WriteDirectory != "") {
-				WriteDirectory += @"\\";
+			if (Config.SaveDirectory != "") {
+				Config.SaveDirectory += @"\\";
 			}
 			//提出処理
 			AojSubmit aojSubmit = new AojSubmit(aojuserAccount);
@@ -142,9 +96,9 @@ namespace AOJsubmitform {
         MessageBox.Show("Submit Error occured!");
         return;
       }
-			string directoryName = WriteDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
+			string directoryName = Config.SaveDirectory + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
 			string fileName = _problemNumber;
-			if (SaveProblemName)
+			if (Config.IsSaveProblemName)
 			{
 				fileName += " " + ProblemName;
 			}
@@ -156,12 +110,12 @@ namespace AOJsubmitform {
 			fileName += GetExtension.getExtension(LanguageBox.Text);
 			TopMost = true;
       MessageBox.Show(status.ToDisplayString());
-      if (status == JudgeStatus.Accepted || status == JudgeStatus.ParialPoints || TweetAll)
+      if (status == JudgeStatus.Accepted || status == JudgeStatus.ParialPoints || Config.IsTweetAll)
       {
         TwitterService.SendTweet(new SendTweetOptions
         {
           Status =
-            UserName + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
+            Config.Usename + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
             "で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" +
             _problemNumber + "&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
         });
@@ -172,7 +126,7 @@ namespace AOJsubmitform {
 		private void SourceCodeChanged(object sender, EventArgs e) {
 		}
 		private void ConfigButtonClick(object sender, EventArgs e) {
-			ConfigForm configForm2 = new ConfigForm();
+			ConfigForm configForm2 = new ConfigForm(Config);
 			configForm2.Show();
 		}
 
