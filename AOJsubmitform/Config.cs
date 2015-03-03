@@ -38,7 +38,7 @@ namespace AOJsubmitform
         Usename = Encoding.Unicode.GetString(File.ReadAllBytes("UserName.bin"));
         Password = Encoding.Unicode.GetString(File.ReadAllBytes("UserPassWord.bin"));
         SaveDirectory = Encoding.Unicode.GetString(File.ReadAllBytes("WriteDirectory.bin"));
-        IsSaveProblemName = Encoding.Unicode.GetString(File.ReadAllBytes("UserPassWord.bin")) == "save";
+        IsSaveProblemName = Encoding.Unicode.GetString(File.ReadAllBytes("SaveProblemName.bin")) == "save";
         IsTweetAll = Encoding.Unicode.GetString(File.ReadAllBytes("TweetAll.bin")) == "tweet";
       }
       //旧形式の設定記録ファイルから設定を呼び出して新形式の設定記録方式に変更する
