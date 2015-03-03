@@ -121,7 +121,7 @@ namespace AOJsubmitform
         TwitterService.SendTweet(new SendTweetOptions
         {
           Status = string.Format(
-          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\n正解するまでに{5}回不正解を出しました\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={2}" +
+          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\n正解するまでに{5}回不正解を出しました\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={1}" +
             "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
           Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(), WACount
         )
@@ -131,7 +131,7 @@ namespace AOJsubmitform
       {
         TwitterService.SendTweet(new SendTweetOptions {
          Status = string.Format(
-          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\nこの問題{5}回目の不正解です\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={2}" +
+          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\nこの問題{5}回目の不正解です\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={1}" +
             "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
           Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(),WACount
         )
