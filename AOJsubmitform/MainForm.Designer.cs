@@ -1,4 +1,7 @@
-﻿namespace AOJsubmitform {
+﻿using System;
+using System.Windows.Forms;
+
+namespace AOJsubmitform {
 	partial class MainForm {
 		/// <summary>
 		/// 必要なデザイナー変数です。
@@ -52,6 +55,7 @@
 			this.SourceCodeBox.Size = new System.Drawing.Size(599, 391);
 			this.SourceCodeBox.TabIndex = 1;
 			this.SourceCodeBox.Text = "";
+      this.SourceCodeBox.TextChanged += new EventHandler(this.SourceCodeBox_TextChanged);
 			// 
 			// LanguageBox
 			// 

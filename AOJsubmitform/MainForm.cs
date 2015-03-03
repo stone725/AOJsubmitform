@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Forms;
 using TweetSharp;
+using System.Threading;
 
 namespace AOJsubmitform
 {
@@ -13,9 +15,9 @@ namespace AOJsubmitform
     public static OAuthRequestToken TwitterRequestToken;
     public static string TwitterVerifier;
     public static OAuthAccessToken TwitterAccess;
-
+    private int WACount = 0;
+    private string beforeProblemNumber = "";
     public Config Config = new Config();
-
     public static string ProblemName = "";
     public MainForm()
     {
@@ -114,13 +116,27 @@ namespace AOJsubmitform
 
     private void TweetStatus(JudgeStatus status)
     {
-      TwitterService.SendTweet(new SendTweetOptions
+      if (status.ToAbbreviation() == "AC")
       {
-        Status =
-          Config.Usename + "がAOJ" + _problemNumber + ":" + ProblemName + "を言語:" + LanguageBox.Text +
-          "で" + status.ToAbbreviation() + "しました!\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" +
-          _problemNumber + "&lang=jp\n#AOJWAinfo #AOJ_WA #AOJsubmitinfo"
-      });
+        TwitterService.SendTweet(new SendTweetOptions
+        {
+          Status = string.Format(
+          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\n正解するまでに{5}回不正解を出しました\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={2}" +
+            "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
+          Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(), WACount
+        )
+        });
+      }
+      else
+      {
+        TwitterService.SendTweet(new SendTweetOptions {
+         Status = string.Format(
+          "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\nこの問題{5}回目の不正解です\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={2}" +
+            "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
+          Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(),WACount
+        )
+        });
+      }
     }
 
     private void SaveSourceCode(string sourceCode)
@@ -145,31 +161,44 @@ namespace AOJsubmitform
         MessageBox.Show("Submit Error occured!");
         return;
       }
-
+      if (beforeProblemNumber != _problemNumber)
+      {
+        beforeProblemNumber = _problemNumber;
+        WACount = 0;
+      }
       TopMost = true;
       MessageBox.Show(status.ToDisplayString());
       switch (status)
       {
         case JudgeStatus.Accepted:
           TweetStatus(status);
+          WACount = 0;
           SaveSourceCode(SourceCodeBox.Text);
+          
           break;
         case JudgeStatus.ParialPoints:
+          WACount++;
           TweetStatus(status);
           SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);
           break;
         default:
+          WACount++;
           if (Config.IsTweetAll)
             TweetStatus(status);
           break;
       }
-      Close();
+      SourceCodeBox.ResetText();
+      TopMost = false;
     }
 
     private void ConfigButtonClick(object sender, EventArgs e)
     {
       ConfigForm configForm2 = new ConfigForm(Config);
       configForm2.Show();
+    }
+
+    private void SourceCodeBox_TextChanged(object sender, EventArgs e)
+    {
     }
 
   }

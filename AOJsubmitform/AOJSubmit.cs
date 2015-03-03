@@ -115,12 +115,12 @@ namespace AOJsubmitform
       while (challanged <= (maxWatingJudgeTime.TotalMilliseconds / 200))
       {
         submitResponse = GetSubmit();
+        Thread.Sleep(200);
         if (lastRunId != ExtractLastSubmitId(submitResponse))
         {
           success = true;
           break;
         }
-        Thread.Sleep(200);
         challanged++;
       }
       if (!success)
@@ -136,14 +136,15 @@ namespace AOJsubmitform
       var data = BuildSubmitData(problemNo, language, sourceCode);
       var submitRequest = BuildRequest(data);
 
+      
+      var lastRunId = GetLastRunId();
       Stream submitReqStream = submitRequest.GetRequestStream();
       submitReqStream.Write(data, 0, data.Length);
       submitReqStream.Close();
 
-      var lastRunId = GetLastRunId();
       try
       {
-        return JudgeStatusHelper.FromString(ExtractLastSubmitResult(GetSubmit()));
+        return JudgeStatusHelper.FromString(GetJudgeResult(lastRunId));
       }
       catch (Exception e)
       {
