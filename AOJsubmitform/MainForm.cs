@@ -176,7 +176,7 @@ namespace AOJsubmitform
           SaveSourceCode(SourceCodeBox.Text);
           
           break;
-        case JudgeStatus.ParialPoints:
+        case JudgeStatus.PartialPoints:
           WACount++;
           TweetStatus(status);
           SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);

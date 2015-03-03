@@ -10,10 +10,10 @@ namespace AOJsubmitform
   {
     WaitingJudge = 0,
     Accepted,
-    ParialPoints,
+    PartialPoints,
     WrongAnswer,
     RuntimeError,
-    Timelimitexceeded,
+    TimeLimitExceeded,
     MemoryLimitExceeded,
     CompileError,
     PresentationError,

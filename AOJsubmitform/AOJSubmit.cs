@@ -115,12 +115,12 @@ namespace AOJsubmitform
       while (challanged <= (maxWatingJudgeTime.TotalMilliseconds / 200))
       {
         submitResponse = GetSubmit();
-        Thread.Sleep(200);
+        
         if (lastRunId != ExtractLastSubmitId(submitResponse))
         {
           success = true;
           break;
-        }
+        }Thread.Sleep(200);
         challanged++;
       }
       if (!success)
