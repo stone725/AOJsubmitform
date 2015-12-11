@@ -183,13 +183,19 @@ namespace AOJsubmitform
         case JudgeStatus.Accepted:
           TweetStatus(status);
           WACount = 0;
-          SaveSourceCode(SourceCodeBox.Text);
+          if (Config.SaveFile)
+          {
+            SaveSourceCode(SourceCodeBox.Text);
+          }
           
           break;
         case JudgeStatus.PartialPoints:
           WACount++;
           TweetStatus(status);
-          SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);
+          if (Config.SaveFile)
+          {
+            SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);
+          }
           break;
         default:
           WACount++;

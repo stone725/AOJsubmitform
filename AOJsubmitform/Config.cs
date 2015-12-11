@@ -11,6 +11,7 @@ namespace AOJsubmitform
     public bool EnableAsciiFilter { get; set; }
     public bool IsSaveProblemName { get; set; }
     public bool IsTweetAll { get; set; }
+    public bool SaveFile { get; set; }
 
     public string TwitterToken { get; set; }
     public string TwitterTokenSecret { get; set; }
@@ -26,6 +27,7 @@ namespace AOJsubmitform
       File.WriteAllBytes("UserPassWord.bin", Encoding.Unicode.GetBytes(Password));
       File.WriteAllBytes("AsciiFilter.bin", Encoding.Unicode.GetBytes(EnableAsciiFilter ? "enabled" : ""));
       File.WriteAllBytes("WriteDirectory.bin", Encoding.Unicode.GetBytes(SaveDirectory));
+      File.WriteAllBytes("SaveFile.bin", Encoding.Unicode.GetBytes(SaveFile ? "save" : ""));
       File.WriteAllBytes("SaveProblemName.bin", Encoding.Unicode.GetBytes(IsSaveProblemName ? "save" : ""));
       File.WriteAllBytes("TweetAll.bin", Encoding.Unicode.GetBytes(IsTweetAll ? "tweet" : ""));
       File.WriteAllBytes("TwitterToken.bin", Encoding.Unicode.GetBytes(TwitterToken));
@@ -43,6 +45,7 @@ namespace AOJsubmitform
         SaveDirectory = configFileReader.ReadLine();
         IsSaveProblemName = configFileReader.ReadLine() == "save";
         configFileReader.Close();
+        SaveFile = true;
         //旧形式の設定ファイルを削除する
         File.Delete(@"Config.txt");
       }
@@ -63,6 +66,14 @@ namespace AOJsubmitform
       if (File.Exists("WriteDirectory.bin"))
       {
         SaveDirectory = Encoding.Unicode.GetString(File.ReadAllBytes("WriteDirectory.bin"));
+      }
+      if (File.Exists("SaveFile.bin"))
+      {
+        SaveFile = Encoding.Unicode.GetString(File.ReadAllBytes("SaveFile.bin")) == "save";
+      }
+      else
+      {
+        SaveFile = true;
       }
       if (File.Exists("SaveProblemName.bin"))
       {

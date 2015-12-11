@@ -34,6 +34,7 @@
       this.asciiFilterCheckBox = new System.Windows.Forms.CheckBox();
       this.TweetAllCheckBox = new System.Windows.Forms.CheckBox();
       this.saveCheckBox = new System.Windows.Forms.CheckBox();
+      this.SaveFileCheckBox = new System.Windows.Forms.CheckBox();
       this.SuspendLayout();
       // 
       // UserNameLabel
@@ -71,7 +72,7 @@
       // 
       // OKButton
       // 
-      this.OKButton.Location = new System.Drawing.Point(131, 154);
+      this.OKButton.Location = new System.Drawing.Point(128, 171);
       this.OKButton.Name = "OKButton";
       this.OKButton.Size = new System.Drawing.Size(72, 23);
       this.OKButton.TabIndex = 4;
@@ -82,7 +83,7 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(6, 62);
+      this.label1.Location = new System.Drawing.Point(10, 128);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(64, 12);
       this.label1.TabIndex = 5;
@@ -90,14 +91,14 @@
       // 
       // DirectoryNameBox
       // 
-      this.DirectoryNameBox.Location = new System.Drawing.Point(76, 59);
+      this.DirectoryNameBox.Location = new System.Drawing.Point(76, 125);
       this.DirectoryNameBox.Name = "DirectoryNameBox";
       this.DirectoryNameBox.Size = new System.Drawing.Size(124, 19);
       this.DirectoryNameBox.TabIndex = 6;
       // 
       // twitterConfigButton
       // 
-      this.twitterConfigButton.Location = new System.Drawing.Point(8, 154);
+      this.twitterConfigButton.Location = new System.Drawing.Point(8, 172);
       this.twitterConfigButton.Name = "twitterConfigButton";
       this.twitterConfigButton.Size = new System.Drawing.Size(77, 23);
       this.twitterConfigButton.TabIndex = 7;
@@ -111,7 +112,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.asciiFilterCheckBox.AutoSize = true;
-      this.asciiFilterCheckBox.Location = new System.Drawing.Point(12, 84);
+      this.asciiFilterCheckBox.Location = new System.Drawing.Point(12, 59);
       this.asciiFilterCheckBox.MaximumSize = new System.Drawing.Size(200, 16);
       this.asciiFilterCheckBox.MinimumSize = new System.Drawing.Size(200, 16);
       this.asciiFilterCheckBox.Name = "asciiFilterCheckBox";
@@ -123,7 +124,7 @@
       // TweetAllCheckBox
       // 
       this.TweetAllCheckBox.AutoSize = true;
-      this.TweetAllCheckBox.Location = new System.Drawing.Point(12, 130);
+      this.TweetAllCheckBox.Location = new System.Drawing.Point(12, 150);
       this.TweetAllCheckBox.Name = "TweetAllCheckBox";
       this.TweetAllCheckBox.Size = new System.Drawing.Size(138, 16);
       this.TweetAllCheckBox.TabIndex = 9;
@@ -136,7 +137,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.saveCheckBox.AutoSize = true;
-      this.saveCheckBox.Location = new System.Drawing.Point(12, 107);
+      this.saveCheckBox.Location = new System.Drawing.Point(12, 104);
       this.saveCheckBox.MaximumSize = new System.Drawing.Size(200, 16);
       this.saveCheckBox.MinimumSize = new System.Drawing.Size(200, 16);
       this.saveCheckBox.Name = "saveCheckBox";
@@ -145,11 +146,24 @@
       this.saveCheckBox.Text = "保存ファイル名に問題名を入れる";
       this.saveCheckBox.UseVisualStyleBackColor = true;
       // 
+      // SaveFileCheckBox
+      // 
+      this.SaveFileCheckBox.AutoSize = true;
+      this.SaveFileCheckBox.Checked = true;
+      this.SaveFileCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.SaveFileCheckBox.Location = new System.Drawing.Point(12, 82);
+      this.SaveFileCheckBox.Name = "SaveFileCheckBox";
+      this.SaveFileCheckBox.Size = new System.Drawing.Size(154, 16);
+      this.SaveFileCheckBox.TabIndex = 11;
+      this.SaveFileCheckBox.Text = "AC,PP時ファイルを保存する";
+      this.SaveFileCheckBox.UseVisualStyleBackColor = true;
+      // 
       // ConfigForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(214, 184);
+      this.ClientSize = new System.Drawing.Size(222, 206);
+      this.Controls.Add(this.SaveFileCheckBox);
       this.Controls.Add(this.saveCheckBox);
       this.Controls.Add(this.TweetAllCheckBox);
       this.Controls.Add(this.asciiFilterCheckBox);
@@ -162,8 +176,8 @@
       this.Controls.Add(this.PassWordLabel);
       this.Controls.Add(this.UserNameLabel);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-      this.MaximumSize = new System.Drawing.Size(230, 223);
-      this.MinimumSize = new System.Drawing.Size(230, 223);
+      this.MaximumSize = new System.Drawing.Size(230, 240);
+      this.MinimumSize = new System.Drawing.Size(230, 240);
       this.Name = "ConfigForm";
       this.Text = "ConfigForm";
       this.ResumeLayout(false);
@@ -184,5 +198,6 @@
 		private System.Windows.Forms.CheckBox asciiFilterCheckBox;
 		private System.Windows.Forms.CheckBox TweetAllCheckBox;
     private System.Windows.Forms.CheckBox saveCheckBox;
+    private System.Windows.Forms.CheckBox SaveFileCheckBox;
 	}
 }

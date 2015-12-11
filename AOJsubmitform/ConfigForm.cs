@@ -21,6 +21,7 @@ namespace AOJsubmitform
       DirectoryNameBox.Text = config.SaveDirectory;
       asciiFilterCheckBox.Checked = config.IsSaveProblemName;
       TweetAllCheckBox.Checked = config.IsTweetAll;
+      SaveFileCheckBox.Checked = config.SaveFile;
     }
 
     private void Save()
@@ -29,6 +30,7 @@ namespace AOJsubmitform
       config.Password = PassWordBox.Text;
       config.EnableAsciiFilter = asciiFilterCheckBox.Checked;
       config.SaveDirectory = DirectoryNameBox.Text;
+      config.SaveFile = SaveFileCheckBox.Checked;
       config.IsSaveProblemName = asciiFilterCheckBox.Checked;
       config.IsTweetAll = TweetAllCheckBox.Checked;
       config.Write();
