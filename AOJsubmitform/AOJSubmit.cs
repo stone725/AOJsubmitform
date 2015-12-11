@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Xml;
 
 namespace AOJsubmitform
 {
@@ -23,8 +24,6 @@ namespace AOJsubmitform
     private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS");
     private readonly string _submitEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
     private readonly string _responseEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
-    private readonly string _runIdStartMark = "<run_id>\n";
-    private readonly string _statusStartMark = "<status>\n";
 
     private string ResponseUrl
     {
@@ -63,44 +62,30 @@ namespace AOJsubmitform
       return request;
     }
 
-    private string ExtractLastSubmitId(string submitResponse)
+    private string GetResult()
     {
-      Int32 lastRunIdStartIndex, lastRunIdEndIndex;
-      String lastRunId = "";
-      if (submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) != -1)
+      string res = "";
+      using (XmlReader reader = XmlReader.Create(ResponseUrl))
       {
-        lastRunIdStartIndex = submitResponse.IndexOf(_runIdStartMark, 0, StringComparison.Ordinal) +
-          _runIdStartMark.Length;
-        lastRunIdEndIndex = submitResponse.IndexOf("\n", lastRunIdStartIndex, StringComparison.Ordinal);
-        lastRunId = submitResponse.Substring(lastRunIdStartIndex, lastRunIdEndIndex - lastRunIdStartIndex);
+        if (reader.ReadToFollowing("status") && reader.ReadToFollowing("status"))
+        {
+          res = reader.ReadString().Replace("\n", "");
+        }
       }
-      return lastRunId;
-    }
-
-    private string ExtractLastSubmitResult(string submitResponse)
-    {
-      var start = submitResponse.IndexOf(_statusStartMark,
-        submitResponse.IndexOf(_statusStartMark, StringComparison.Ordinal) + _statusStartMark.Length,
-        StringComparison.Ordinal
-      ) + _statusStartMark.Length;
-      var end = submitResponse.IndexOf("\n</status>", start, StringComparison.Ordinal);
-      return submitResponse.Substring(start, end - start);
-    }
-
-    private string GetSubmit()
-    {
-      var runIdRequest = WebRequest.Create(ResponseUrl) as HttpWebRequest;
-      runIdRequest.Timeout = (int)_timeout.TotalMilliseconds;
-      var lastrRunIdResstream = runIdRequest.GetResponse().GetResponseStream();
-      using (var reader = new StreamReader(lastrRunIdResstream, _encoding))
-      {
-        return reader.ReadToEnd();
-      }
+      return res;
     }
 
     private string GetLastRunId()
     {
-      return ExtractLastSubmitId(GetSubmit());
+      string res = "";
+      using (XmlReader reader = XmlReader.Create(ResponseUrl))
+      {
+        if (reader.ReadToFollowing("run_id"))
+        {
+          res = reader.ReadString().Replace("\n", "");
+        }
+      }
+      return res;
     }
 
     private string GetJudgeResult(string lastRunId)
@@ -114,13 +99,12 @@ namespace AOJsubmitform
       //200ms * 100 = 20000ms→20sより100回試行
       while (challanged <= (maxWatingJudgeTime.TotalMilliseconds / 200))
       {
-        submitResponse = GetSubmit();
-        
-        if (lastRunId != ExtractLastSubmitId(submitResponse))
+        if (lastRunId != GetLastRunId())
         {
           success = true;
           break;
-        }Thread.Sleep(200);
+        }
+        Thread.Sleep(200);
         challanged++;
       }
       if (!success)
@@ -128,7 +112,7 @@ namespace AOJsubmitform
         throw new AojSubmitException();
       }
 
-      return ExtractLastSubmitResult(GetSubmit());
+      return GetResult();
     }
 
     public JudgeStatus Submit(string problemNo, string language, string sourceCode)
