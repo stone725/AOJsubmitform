@@ -16,24 +16,24 @@ namespace AOJsubmitform
 
     private void Initialize()
     {
-      UserNameBox.Text = config.Usename;
-      PassWordBox.Text = config.Password;
-      DirectoryNameBox.Text = config.SaveDirectory;
-      asciiFilterCheckBox.Checked = config.IsSaveProblemName;
-      TweetAllCheckBox.Checked = config.IsTweetAll;
-      SaveFileCheckBox.Checked = config.SaveFile;
+      UserNameBox.Text = config.username_;
+      PassWordBox.Text = config.password_;
+      DirectoryNameBox.Text = config.savedirectory_;
+      asciiFilterCheckBox.Checked = config.saveproblemname_;
+      TweetAllCheckBox.Checked = config.tweetall_;
+      SaveFileCheckBox.Checked = config.savefile_;
     }
 
     private void Save()
     {
-      config.Usename = UserNameBox.Text;
-      config.Password = PassWordBox.Text;
-      config.EnableAsciiFilter = asciiFilterCheckBox.Checked;
-      config.SaveDirectory = DirectoryNameBox.Text;
-      config.SaveFile = SaveFileCheckBox.Checked;
-      config.IsSaveProblemName = asciiFilterCheckBox.Checked;
-      config.IsTweetAll = TweetAllCheckBox.Checked;
-      config.Write();
+      config.username_ = UserNameBox.Text;
+      config.password_ = PassWordBox.Text;
+      config.enableasciifilter_ = asciiFilterCheckBox.Checked;
+      config.savedirectory_ = DirectoryNameBox.Text;
+      config.savefile_ = SaveFileCheckBox.Checked;
+      config.saveproblemname_ = asciiFilterCheckBox.Checked;
+      config.tweetall_ = TweetAllCheckBox.Checked;
+      config.SaveConfig();
     }
 
     private void twitterConfigButton_Click(object sender, EventArgs e)

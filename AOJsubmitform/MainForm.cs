@@ -38,9 +38,9 @@ namespace AOJsubmitform
           MessageBox.Show(@"読み込むファイルがありません!");
         }
       }
-      Config.Load();
-      if (Config.TwitterToken != "" && Config.TwitterTokenSecret != "")
-        TwitterService.AuthenticateWith(Config.TwitterToken, Config.TwitterTokenSecret);
+      Config.LoadConfig();
+      if (Config.twittertoken_ != "" && Config.twittertokensecret_ != "")
+        TwitterService.AuthenticateWith(Config.twittertoken_, Config.twittertokensecret_);
       //言語ボックスの初期化
       LanguageBox.Text = "C++";
     }
@@ -78,13 +78,13 @@ namespace AOJsubmitform
       }
       //AOJアカウントの取得
       //ユーザー名が入力されていなかった場合
-      if (Config.Usename == "")
+      if (Config.username_ == "")
       {
         MessageBox.Show(@"アカウント名を入力してください！");
         return false;
       }
       //ユーザーのパスワードが入力されていなかった場合
-      if (Config.Password == "")
+      if (Config.password_ == "")
       {
         MessageBox.Show(@"パスワードを入力してください!");
         return false;
@@ -95,7 +95,7 @@ namespace AOJsubmitform
     private string buildFileName()
     {
       string fileName = _problemNumber;
-      if (Config.IsSaveProblemName)
+      if (Config.saveproblemname_)
       {
         fileName += " " + ProblemName;
       }
@@ -111,8 +111,8 @@ namespace AOJsubmitform
     private string buildDirectoryName()
     {
       var directoryName = "";
-      if (Config.SaveDirectory != "")
-        directoryName = Config.SaveDirectory + @"\\";
+      if (Config.savedirectory_ != "")
+        directoryName = Config.savedirectory_ + @"\\";
       return directoryName + @"Volume " + _problemNumber.Substring(0, _problemNumber.Length - 2) + @"\\";
     }
 
@@ -125,7 +125,7 @@ namespace AOJsubmitform
           Status = string.Format(
           "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\n正解するまでに{5}回不正解を出しました\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={1}" +
             "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
-          Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(), WACount
+          Config.username_, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(), WACount
         )
         });
       }
@@ -135,7 +135,7 @@ namespace AOJsubmitform
          Status = string.Format(
           "{0}がAOJ{1}:{2}を言語{3}で{4}しました!\nこの問題{5}回目の不正解です\nhttp://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id={1}" +
             "&lang=jp\n#AOJ{4}info #AOJ_{4} #AOJsubmitinfo",
-          Config.Usename, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(),WACount
+          Config.username_, _problemNumber, ProblemName, LanguageBox.Text, status.ToAbbreviation(),WACount
         )
         });
       }
@@ -144,7 +144,7 @@ namespace AOJsubmitform
     private string FilterSourceCode(string sourceCode)
     {
       IEnumerable<char> s = sourceCode;
-      if (Config.EnableAsciiFilter)
+      if (Config.enableasciifilter_)
         s = s.Where(c => (int)c < 128);
       return string.Join("", s);
     }
@@ -159,7 +159,7 @@ namespace AOJsubmitform
       ProblemName = new AojGetProblemName().Getproblemname(_problemNumber);
       if (!CanSubmit())
         return;
-      AojAccount aojuserAccount = new AojAccount(Config.Usename, Config.Password);
+      AojAccount aojuserAccount = new AojAccount(Config.username_, Config.password_);
 
       JudgeStatus status;
       try
@@ -183,7 +183,7 @@ namespace AOJsubmitform
         case JudgeStatus.Accepted:
           TweetStatus(status);
           WACount = 0;
-          if (Config.SaveFile)
+          if (Config.savefile_)
           {
             SaveSourceCode(SourceCodeBox.Text);
           }
@@ -192,14 +192,14 @@ namespace AOJsubmitform
         case JudgeStatus.PartialPoints:
           WACount++;
           TweetStatus(status);
-          if (Config.SaveFile)
+          if (Config.savefile_)
           {
             SaveSourceCode("//Partial Points.\n" + SourceCodeBox.Text);
           }
           break;
         default:
           WACount++;
-          if (Config.IsTweetAll)
+          if (Config.tweetall_)
             TweetStatus(status);
           break;
       }

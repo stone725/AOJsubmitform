@@ -24,9 +24,9 @@ namespace AOJsubmitform
     {
       MainForm.TwitterAccess = MainForm.TwitterService.GetAccessToken(MainForm.TwitterRequestToken, MainForm.TwitterVerifier);
       MainForm.TwitterService.AuthenticateWith(MainForm.TwitterAccess.Token, MainForm.TwitterAccess.TokenSecret);
-      config.TwitterToken = MainForm.TwitterAccess.Token;
-      config.TwitterTokenSecret = MainForm.TwitterAccess.TokenSecret;
-      config.Write();
+      config.twittertoken_ = MainForm.TwitterAccess.Token;
+      config.twittertokensecret_ = MainForm.TwitterAccess.TokenSecret;
+      config.SaveConfig();
       Close();
     }
 
