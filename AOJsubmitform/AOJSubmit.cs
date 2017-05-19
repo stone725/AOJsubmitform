@@ -18,45 +18,50 @@ namespace AOJsubmitform
 
   public class AojSubmit
   {
-    private readonly AojAccount _account;
-    private readonly TimeSpan _timeout = new TimeSpan(0, 0, 10);
-    private readonly TimeSpan maxWatingJudgeTime = new TimeSpan(0, 0, 20);
-    private readonly Encoding _encoding = Encoding.GetEncoding("Shift_JIS");
-    private readonly string _submitEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
-    private readonly string _responseEndpoint = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
+    private readonly AojAccount account_;
+    private readonly TimeSpan timeout_ = new TimeSpan(0, 0, 10);
+    private readonly TimeSpan maxwatingjudgetime_ = new TimeSpan(0, 0, 20);
+    private readonly Encoding encoding_ = Encoding.GetEncoding("Shift_JIS");
+    private readonly string submitendpoint_ = "http://judge.u-aizu.ac.jp/onlinejudge/servlet/Submit";
+    private readonly string responseendpoint_ = "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=";
 
-    private string ResponseUrl
+    private string responseurl_
     {
       get
       {
-        return _responseEndpoint + _account.GetUserName();
+        return responseendpoint_ + account_.GetUserName();
       }
     }
 
     public AojSubmit(AojAccount aojAccount)
     {
-      _account = aojAccount;
+      account_ = aojAccount;
     }
 
     private byte[] BuildSubmitData(string problemNo, string language, string sourceCode)
     {
-      Hashtable submitConfig = new Hashtable();
-      submitConfig["userID"] = WebUtility.UrlEncode(_account.GetUserName());
-      submitConfig["sourceCode"] = WebUtility.UrlEncode(sourceCode);
-      submitConfig["problemNO"] = WebUtility.UrlEncode(problemNo);
-      submitConfig["language"] = WebUtility.UrlEncode(language);
-      submitConfig["password"] = WebUtility.UrlEncode(_account.GetUserPass());
-      var submitParam = submitConfig.Keys.Cast<string>().Aggregate("", (current, key) => current + String.Format("{0}={1}&", key, submitConfig[key]));
-      return _encoding.GetBytes(submitParam);
+      Hashtable submitConfig = new Hashtable
+      {
+        ["userID"    ] = WebUtility.UrlEncode(account_.GetUserName()),
+        ["sourceCode"] = WebUtility.UrlEncode(sourceCode),
+        ["problemNO" ] = WebUtility.UrlEncode(problemNo),
+        ["language"  ] = WebUtility.UrlEncode(language),
+        ["password"  ] = WebUtility.UrlEncode(account_.GetUserPass())
+      };
+
+
+      var submitParam = submitConfig.Keys.Cast<string>().Aggregate("", (current, key) => current + string.Format("{0}={1}&", key, submitConfig[key]));
+
+			return encoding_.GetBytes(submitParam);
     }
 
     private HttpWebRequest BuildRequest(byte[] data)
     {
-      HttpWebRequest request = WebRequest.Create(_submitEndpoint) as HttpWebRequest;
+      HttpWebRequest request = WebRequest.Create(submitendpoint_) as HttpWebRequest;
 
-      request.Method = "POST";
-      request.Timeout = (int)_timeout.TotalMilliseconds;
-      request.ContentType = "application/x-www-form-urlencoded";
+      request.Method        = "POST";
+      request.Timeout       = (int)timeout_.TotalMilliseconds;
+      request.ContentType   = "application/x-www-form-urlencoded";
       request.ContentLength = data.Length;
 
       return request;
@@ -65,7 +70,7 @@ namespace AOJsubmitform
     private string GetResult()
     {
       string res = "";
-      using (XmlReader reader = XmlReader.Create(ResponseUrl))
+      using (XmlReader reader = XmlReader.Create(responseurl_))
       {
         if (reader.ReadToFollowing("status") && reader.ReadToFollowing("status"))
         {
@@ -75,10 +80,11 @@ namespace AOJsubmitform
       return res;
     }
 
+    //ユーザーの直近の提出IDを取得
     private string GetLastRunId()
     {
       string res = "";
-      using (XmlReader reader = XmlReader.Create(ResponseUrl))
+      using (XmlReader reader = XmlReader.Create(responseurl_))
       {
         if (reader.ReadToFollowing("run_id"))
         {
@@ -90,41 +96,33 @@ namespace AOJsubmitform
 
     private string GetJudgeResult(string lastRunId)
     {
+			int requestCount = 0;
 
-      /*提出結果を格納する変数*/
-      string submitResponse = "";
-      int challanged = 0;
-      bool success = false;
-
-      //200ms * 100 = 20000ms→20sより100回試行
-      while (challanged <= (maxWatingJudgeTime.TotalMilliseconds / 200))
+	    //200ms * 100 = 20000ms→20sより100回試行
+      while (requestCount <= (maxwatingjudgetime_.TotalMilliseconds / 200))
       {
         if (lastRunId != GetLastRunId())
         {
-          success = true;
-          break;
+	        return GetResult();
         }
         Thread.Sleep(200);
-        challanged++;
-      }
-      if (!success)
-      {
-        throw new AojSubmitException();
+        requestCount++;
       }
 
-      return GetResult();
+      throw new AojSubmitException();
     }
 
     public JudgeStatus Submit(string problemNo, string language, string sourceCode)
     {
-      var data = BuildSubmitData(problemNo, language, sourceCode);
+      var data          = BuildSubmitData(problemNo, language, sourceCode);
       var submitRequest = BuildRequest(data);
 
       
       var lastRunId = GetLastRunId();
-      Stream submitReqStream = submitRequest.GetRequestStream();
-      submitReqStream.Write(data, 0, data.Length);
-      submitReqStream.Close();
+      using (Stream submitReqStream = submitRequest.GetRequestStream())
+      {
+        submitReqStream.Write(data, 0, data.Length);
+      }
 
       try
       {

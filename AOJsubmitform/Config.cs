@@ -23,14 +23,14 @@ namespace AOJsubmitform
 
     public void SaveConfig()
     {
-      File.WriteAllBytes("UserName.bin",           Encoding.Unicode.GetBytes(username_));
-      File.WriteAllBytes("UserPassWord.bin",       Encoding.Unicode.GetBytes(password_));
-      File.WriteAllBytes("AsciiFilter.bin",        Encoding.Unicode.GetBytes(enableasciifilter_ ? "enabled" : ""));
-      File.WriteAllBytes("WriteDirectory.bin",     Encoding.Unicode.GetBytes(savedirectory_));
-      File.WriteAllBytes("SaveFile.bin",           Encoding.Unicode.GetBytes(savefile_ ? "save" : ""));
-      File.WriteAllBytes("SaveProblemName.bin",    Encoding.Unicode.GetBytes(saveproblemname_ ? "save" : ""));
-      File.WriteAllBytes("TweetAll.bin",           Encoding.Unicode.GetBytes(tweetall_ ? "tweet" : ""));
-      File.WriteAllBytes("TwitterToken.bin",       Encoding.Unicode.GetBytes(twittertoken_));
+      File.WriteAllBytes("UserName.bin"          , Encoding.Unicode.GetBytes(username_));
+      File.WriteAllBytes("UserPassWord.bin"      , Encoding.Unicode.GetBytes(password_));
+      File.WriteAllBytes("AsciiFilter.bin"       , Encoding.Unicode.GetBytes(enableasciifilter_ ? "enabled" : ""));
+      File.WriteAllBytes("WriteDirectory.bin"    , Encoding.Unicode.GetBytes(savedirectory_));
+      File.WriteAllBytes("SaveFile.bin"          , Encoding.Unicode.GetBytes(savefile_ ? "save" : ""));
+      File.WriteAllBytes("SaveProblemName.bin"   , Encoding.Unicode.GetBytes(saveproblemname_ ? "save" : ""));
+      File.WriteAllBytes("TweetAll.bin"          , Encoding.Unicode.GetBytes(tweetall_ ? "tweet" : ""));
+      File.WriteAllBytes("TwitterToken.bin"      , Encoding.Unicode.GetBytes(twittertoken_));
       File.WriteAllBytes("TwitterTokenSecret.bin", Encoding.Unicode.GetBytes(twittertokensecret_));
     }
 
@@ -49,9 +49,9 @@ namespace AOJsubmitform
 		  {
 			  using (StreamReader configFileReader = new StreamReader("Config.txt"))
 			  {
-				  username_ = configFileReader.ReadLine();
-				  password_ = configFileReader.ReadLine();
-				  savedirectory_ = configFileReader.ReadLine();
+				  username_        = configFileReader.ReadLine();
+				  password_        = configFileReader.ReadLine();
+				  savedirectory_   = configFileReader.ReadLine();
 				  saveproblemname_ = configFileReader.ReadLine() == "save";
 			  }
 		  }
@@ -60,10 +60,8 @@ namespace AOJsubmitform
 		  {
 			  using (StreamReader twitterConfigFileReader = new StreamReader("TwitterConfig.txt"))
 			  {
-				  twittertoken_ = twitterConfigFileReader.ReadLine();
+				  twittertoken_       = twitterConfigFileReader.ReadLine();
 				  twittertokensecret_ = twitterConfigFileReader.ReadLine();
-				  twitterConfigFileReader.Close();
-				  File.Delete("TwitterConfig.txt");
 			  }
 		  }
 
@@ -74,15 +72,15 @@ namespace AOJsubmitform
     public void LoadConfig()
     {
 			//新しい方式の設定記録ファイル（無意味なバイナリ式）から設定を呼び出す
-			username_ = LoadConfigFromNewFile("UserName.bin");
-	    password_ = LoadConfigFromNewFile("UserPassWord.bin");
+			username_          = LoadConfigFromNewFile("UserName.bin");
+	    password_          = LoadConfigFromNewFile("UserPassWord.bin");
 	    enableasciifilter_ = LoadConfigFromNewFile("AsciiFilter.bin") == "enabled";
-	    savedirectory_ = LoadConfigFromNewFile("WriteDirectory.bin");
-	    savefile_ = !File.Exists("SaveFile.bin") || LoadConfigFromNewFile("SaveFile.bin") == "save";
-	    saveproblemname_ = LoadConfigFromNewFile("SaveProblemName.bin") == "save";
-	    tweetall_ = LoadConfigFromNewFile("TweetAll.bin") == "tweet";
+	    savedirectory_     = LoadConfigFromNewFile("WriteDirectory.bin");
+	    savefile_          = !File.Exists("SaveFile.bin") || LoadConfigFromNewFile("SaveFile.bin") == "save";
+	    saveproblemname_   = LoadConfigFromNewFile("SaveProblemName.bin") == "save";
+	    tweetall_          = LoadConfigFromNewFile("TweetAll.bin") == "tweet";
 
-	    twittertoken_ = LoadConfigFromNewFile("TwitterToken.bin");
+	    twittertoken_       = LoadConfigFromNewFile("TwitterToken.bin");
 	    twittertokensecret_ = LoadConfigFromNewFile("TwitterTokenSecret.bin");
 
 			//旧形式の設定記録ファイルから設定を呼び出す
